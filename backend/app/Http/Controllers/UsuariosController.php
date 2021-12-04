@@ -101,6 +101,7 @@ class UsuariosController extends Controller
             }
 
             $request = $request->all();
+            $request['senha'] = $senha;
             $usuario->update($request);
 
             return response(['status' => "success", 'data' => $usuario, 'message' => "Usuário $usuario->nome atualizado com sucesso!"], 200);
