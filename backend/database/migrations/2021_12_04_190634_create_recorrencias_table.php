@@ -19,7 +19,9 @@ class CreateRecorrenciasTable extends Migration
             $table->integer('fluxo_id')->unsigned();
             $table->foreign('fluxo_id')->references('id')->on('fluxos');
             $table->string('valor');
-            $table->boolean('saldo');
+            $table->boolean('status');
+            $table->integer('parcela_numero');
+            $table->date('data_referencia');
             $table->timestamps();
             $table->softDeletes();
         });

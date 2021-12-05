@@ -16,5 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(['namespace' => 'App\Http\Controllers'], function () {
     Route::resource('usuarios', 'UsuariosController');
     Route::resource('clientes', 'ClientesController');
+    Route::resource('fluxos', 'FluxosController');
+    Route::resource('recorrencias', 'RecorrenciasController');
     Route::get('/categorias/{tipo_categoria}', 'CategoriasController@getCategorias');
 });

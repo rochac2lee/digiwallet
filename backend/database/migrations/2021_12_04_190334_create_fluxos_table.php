@@ -29,6 +29,8 @@ class CreateFluxosTable extends Migration
             $table->string('tipo_fluxo');
             $table->integer('status');
             $table->boolean('recorrencia');
+            $table->integer('parcelas')->nullable();
+            $table->date('data_referencia')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
