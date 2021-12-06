@@ -16,6 +16,23 @@ class RecorrenciasController extends Controller
     }
 
         /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $recorrencia = Recorrencia::find($id);
+
+        if (!$recorrencia) {
+            return response(['status' => "error", 'data' => '', 'message' => "Dados não encontrados!"], 404);
+        } else {
+            return response(['status' => "success", 'data' => $recorrencia, 'message' => ""], 200);
+        }
+    }
+
+        /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -27,7 +44,7 @@ class RecorrenciasController extends Controller
         $recorrencia = Recorrencia::find($id);
 
         if (!$recorrencia) {
-            return response(['status' => "error", 'data' => '', 'message' => "Dados não enconrados!"], 404);
+            return response(['status' => "error", 'data' => '', 'message' => "Dados não encontradoss!"], 404);
         } else if ($request->fluxo_id && !Fluxo::find($request->fluxo_id)) {
             return response(['status' => "error", 'message' => "Fluxo não encontrado!"], 404);
         } else {
@@ -50,7 +67,7 @@ class RecorrenciasController extends Controller
         $recorrencia = Recorrencia::find($id);
 
         if (!$recorrencia) {
-            return response(['status' => "error", 'data' => '', 'message' => "Dados não enconrados!"], 404);
+            return response(['status' => "error", 'data' => '', 'message' => "Dados não encontradoss!"], 404);
         } else {
 
             $recorrencia->delete();

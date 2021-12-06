@@ -26,6 +26,7 @@ class LoginController extends Controller
             $cliente = Cliente::find($usuario->cliente_id);
 
             $dados = new \stdClass();
+            $dados->id = $usuario->id;
             $dados->nome = $usuario->nome;
             $dados->usuario = $usuario->usuario;
             $dados->perfil = $usuario->perfil;

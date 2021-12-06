@@ -21,8 +21,12 @@ class FluxosController extends Controller
         $fluxos = Fluxo::all();
 
         foreach ($fluxos as $fluxo) {
+            if ($fluxo->conta_id) {
+                $fluxo->conta = Conta::find($fluxo->conta_id)->nome;
+            }
+
             $fluxo->recorrencia = DB::table('recorrencias')
-                ->select('recorrencias.*')
+                ->select('*')
                 ->where('fluxo_id', $fluxo->id)
                 ->get();
         }

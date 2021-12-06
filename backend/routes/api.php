@@ -22,5 +22,6 @@ Route::group(['middleware' => ['check.token'], 'namespace' => 'App\Http\Controll
     Route::resource('clientes', 'ClientesController');
     Route::resource('fluxos', 'FluxosController');
     Route::resource('recorrencias', 'RecorrenciasController');
+    Route::resource('contas', 'ContasController');
     Route::get('/categorias/{tipo_categoria}', 'CategoriasController@getCategorias');
 });
