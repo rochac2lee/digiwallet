@@ -21,6 +21,7 @@ class CreateUsuariosTable extends Migration
             $table->string('usuario')->unique();
             $table->string('senha');
             $table->string('token');
+            $table->string('perfil');
             $table->timestamps();
             $table->softDeletes();
         });

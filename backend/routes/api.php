@@ -13,7 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['namespace' => 'App\Http\Controllers'], function () {
+Route::group(['namespace' => 'App\Http\Controllers\Auth'], function () {
+    Route::post('/auth/login', 'LoginController@login');
+});
+
+Route::group(['middleware' => ['check.token'], 'namespace' => 'App\Http\Controllers'], function () {
     Route::resource('usuarios', 'UsuariosController');
     Route::resource('clientes', 'ClientesController');
     Route::resource('fluxos', 'FluxosController');

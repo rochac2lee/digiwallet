@@ -45,6 +45,7 @@ class UsuariosController extends Controller
                 'usuario' => $request->usuario,
                 'senha' => md5($request->senha),
                 'cliente_id' => $request->cliente_id,
+                'perfil' => $request->perfil,
                 'token' => MakeJwt([
                     'data' => [
                         'iss' => 'digiwallet',

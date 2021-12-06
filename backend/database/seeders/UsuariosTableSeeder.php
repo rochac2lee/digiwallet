@@ -18,6 +18,7 @@ class UsuariosTableSeeder extends Seeder
             "nome" => "Administrador",
             "usuario" => "admin@digiwallet.com",
             "senha" => md5("admin"),
+            "perfil" => "administrador",
             'token' =>MakeJwt([
                 'data' => [
                     'iss' => 'digiwallet',
