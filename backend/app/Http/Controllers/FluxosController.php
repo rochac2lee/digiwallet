@@ -84,14 +84,6 @@ class FluxosController extends Controller
                         $recorrencia[$i] = $this->newRecorrencia($fluxo, $i, $datas[$i]);
                     }
                 }
-            } else {
-                $recorrencia = Recorrencia::create([
-                    "fluxo_id" => $fluxo->id,
-                    "valor" => $fluxo->valor,
-                    "status" => false,
-                    "parcela_numero" => 1,
-                    "data_referencia" => $fluxo->data_referencia
-                ]);
             }
 
             $fluxo->recorrencia = $recorrencia;
