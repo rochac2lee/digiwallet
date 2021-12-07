@@ -45,7 +45,7 @@ class ClientesController extends Controller
         $cliente = Cliente::find($id);
 
         if (!$cliente) {
-            return response(['status' => "error", 'data' => '', 'message' => "Cliente não enconrado!"], 404);
+            return response(['status' => "error", 'data' => '', 'message' => "Cliente não encontrado!"], 404);
         } else {
             return response(['status' => "success", 'data' => $cliente, 'message' => ""], 200);
         }
@@ -63,7 +63,7 @@ class ClientesController extends Controller
         $cliente = Cliente::find($id);
 
         if (!$cliente) {
-            return response(['status' => "error", 'data' => '', 'message' => "Cliente não enconrado!"], 404);
+            return response(['status' => "error", 'data' => '', 'message' => "Cliente não encontrado!"], 404);
         } else {
 
             $request = $request->all();
@@ -84,7 +84,7 @@ class ClientesController extends Controller
         $cliente = Cliente::find($id);
 
         if (!$cliente) {
-            return response(['status' => "error", 'data' => '', 'message' => "Cliente não enconrado!"], 404);
+            return response(['status' => "error", 'data' => '', 'message' => "Cliente não encontrado!"], 404);
         } else {
 
             $cliente->delete();

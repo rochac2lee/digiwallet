@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Categoria;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -26,5 +27,22 @@ class CategoriasController extends Controller
             } else {
                 return response(['status' => "success", 'data' => $categorias, 'message' => ""], 200);
             }
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $categoria = Categoria::find($id);
+
+        if (!$categoria) {
+            return response(['status' => "error", 'data' => '', 'message' => "Categoria não encontrada!"], 404);
+        } else {
+            return response(['status' => "success", 'data' => [$categoria], 'message' => ""], 200);
+        }
     }
 }

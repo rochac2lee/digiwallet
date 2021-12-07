@@ -3,6 +3,7 @@
     :value="isDrawerOpen"
     app
     floating
+    color="white"
     width="260"
     class="app-navigation-menu"
     :right="$vuetify.rtl"
@@ -34,8 +35,8 @@
     <!-- Navigation Items -->
     <v-list
       expand
-      shaped
-      class="vertical-nav-menu-items pr-5"
+      rounded
+      class="vertical-nav-menu-items"
     >
       <nav-menu-link
         title="Dashboard"

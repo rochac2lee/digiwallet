@@ -127,7 +127,7 @@ class FluxosController extends Controller
         $fluxo = Fluxo::find($id);
 
         if (!$fluxo) {
-            return response(['status' => "error", 'data' => '', 'message' => "Dados não enconrados!"], 404);
+            return response(['status' => "error", 'data' => '', 'message' => "Dados não encontrados!"], 404);
         } else {
 
             $recorrencias = DB::table('recorrencias')

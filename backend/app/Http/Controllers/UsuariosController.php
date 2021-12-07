@@ -72,7 +72,7 @@ class UsuariosController extends Controller
         $usuario = Usuario::find($id);
 
         if (!$usuario) {
-            return response(['status' => "error", 'data' => '', 'message' => "Usuário não enconrado!"], 404);
+            return response(['status' => "error", 'data' => '', 'message' => "Usuário não encontrado!"], 404);
         } else {
             return response(['status' => "success", 'data' => $usuario, 'message' => ""], 200);
         }
@@ -90,7 +90,7 @@ class UsuariosController extends Controller
         $usuario = Usuario::find($id);
 
         if (!$usuario) {
-            return response(['status' => "error", 'data' => '', 'message' => "Usuário não enconrado!"], 404);
+            return response(['status' => "error", 'data' => '', 'message' => "Usuário não encontrado!"], 404);
         } else if ($request->cliente_id && !Cliente::find($request->cliente_id)) {
             return response(['status' => "error", 'message' => "Cliente não encontrado!"], 404);
         } else {
@@ -120,7 +120,7 @@ class UsuariosController extends Controller
         $usuario = Usuario::find($id);
 
         if (!$usuario) {
-            return response(['status' => "error", 'data' => '', 'message' => "Usuário não enconrado!"], 404);
+            return response(['status' => "error", 'data' => '', 'message' => "Usuário não encontrado!"], 404);
         } else {
 
             $usuario->delete();

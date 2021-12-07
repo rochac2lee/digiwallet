@@ -10,7 +10,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in fluxos" :key="item.fluxos">
+        <tr v-for="item in fluxos" :key="item.fluxos" class="pointer" @click="editar(item)">
           <td class="text-center" v-if="item.tipo_fluxo == 'entrada'">
             <v-tooltip right>
               <template v-slot:activator="{ on, attrs }">
@@ -50,6 +50,9 @@ export default {
     }
   },
   methods: {
+    editar(lancamento) {
+      eventbus.editLancamentos(lancamento)
+    },
     getFluxos() {
       this.$http.get(
         'fluxos',
@@ -70,3 +73,9 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.pointer {
+  cursor: pointer;
+}
+</style>

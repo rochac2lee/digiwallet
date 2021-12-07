@@ -5,7 +5,8 @@
       <v-card>
         <v-card-title>Lançamentos</v-card-title>
         <LancamentosTable></LancamentosTable>
-        <LancamentosForm :dialog="dialog" @close="dialog = false"></LancamentosForm>
+        <LancamentosForm :dialog="dialog" @closeForm="dialog = false"></LancamentosForm>
+        <LancamentosEdit :dialogEdit="dialogEdit"  @openEdit="openEdit" @closeEdit="dialogEdit = false"></LancamentosEdit>
       </v-card>
     </v-col>
     <v-speed-dial
@@ -35,6 +36,7 @@
 <script>
 import LancamentosTable from './LancamentosTable.vue'
 import LancamentosForm from './lancamentosForm.vue'
+import LancamentosEdit from './lancamentosEdit.vue'
 
 import { mdiPlus } from '@mdi/js'
 
@@ -42,6 +44,7 @@ export default {
   components: {
     LancamentosTable,
     LancamentosForm,
+    LancamentosEdit
   },
   setup() {
     return {
@@ -58,8 +61,14 @@ export default {
       mdiPlus,
 
       dialog: false,
+      dialogEdit: false,
     }
   },
+  methods: {
+    openEdit() {
+      this.dialogEdit = true
+    }
+  }
 }
 </script>
 <style scoped>

@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center">
-    <v-dialog v-model="dialog" persistent max-width="600px">
+    <v-dialog v-model="dialogEdit" persistent max-width="600px">
       <v-card>
         <v-card-title>
           <span class="text-h5">Novo Lançamento</span>
@@ -123,7 +123,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="$emit('closeForm')"> Cancelar </v-btn>
+          <v-btn color="blue darken-1" text @click="$emit('closeEdit')"> Cancelar </v-btn>
           <v-btn color="blue darken-1" text @click="salvar()"> Salvar </v-btn>
         </v-card-actions>
       </v-card>
@@ -141,15 +141,11 @@ export default {
     'v-text-field-money': Money,
   },
   props: {
-    dialog: { type: Boolean, default: false },
+    dialogEdit: { type: Boolean, default: false }
   },
   data() {
     return {
-      lancamento: { 
-        recorrencia: false,
-        status: 0
-      },
-
+      lancamento: {},
       contas: {},
       clientes: {},
       categorias: [],
@@ -181,8 +177,9 @@ export default {
             break
         }
         this.lancamento.data_referencia = this.date
-        this.$http.post(
+        this.$http.put(
           'fluxos',
+          this.lancamento.id,
           this.lancamento,
           res => {
             console.log(res.data.data)
@@ -214,19 +211,9 @@ export default {
         err => console.error(err),
       )
     },
-    getCategorias() {
-      var tipo_lancamento_id = null
-      switch (this.tipo_lancamento) {
-        case 'Entrada':
-          tipo_lancamento_id = 1
-          break
-
-        case 'Saída':
-          tipo_lancamento_id = 2
-          break
-      }
+    getCategorias(id) {
       this.$http.get(
-        `categorias/tipo/${tipo_lancamento_id}`,
+        `categorias/${id}`,
         res => {
           this.categorias = res.data.data
         },
@@ -261,6 +248,22 @@ export default {
   mounted() {
     this.getContas()
     this.getClientes()
+
+    eventbus.$on('editLancamentos', lancamento => {
+        switch (lancamento.tipo_fluxo) {
+            case "entrada":
+                this.tipo_lancamento = "Entrada"
+                break;
+
+            case "saida":
+                this.tipo_lancamento = "Saída"
+                break;
+
+        }
+        this.lancamento = lancamento
+        this.getCategorias(lancamento.categoria_id)
+        this.$emit('openEdit')
+    })
   },
 }
 </script>

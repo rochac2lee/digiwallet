@@ -22,6 +22,10 @@ export const eventbus = new Vue({
   methods: {
       updateLancamentos() {
           this.$emit('updateLancamentos')
+      },
+      editLancamentos(lancamento) {
+        console.log("teste", lancamento);
+          this.$emit('editLancamentos', lancamento)
       }
       
   }
