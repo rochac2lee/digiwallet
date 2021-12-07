@@ -15,6 +15,9 @@ Vue.use(VueSession)
 import VueCookies from 'vue-cookies'
 Vue.use(VueCookies)
 
+import VuetifyMask from "vuetify-mask";  
+Vue.use(VuetifyMask)
+
 Vue.prototype.$http = http
 
 Vue.config.productionTip = false

@@ -5730,6 +5730,11 @@ mkdirp@^0.5.1, mkdirp@^0.5.3, mkdirp@^0.5.5, mkdirp@~0.5.1:
   dependencies:
     minimist "^1.2.5"
 
+moment@^2.29.1:
+  version "2.29.1"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
+  integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
+
 move-concurrently@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/move-concurrently/-/move-concurrently-1.0.1.tgz#be2c005fda32e0b29af1f05d7c4b33214c701f92"
@@ -8654,6 +8659,11 @@ vuetify-loader@^1.7.0:
     decache "^4.6.0"
     file-loader "^6.2.0"
     loader-utils "^2.0.0"
+
+vuetify-mask@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/vuetify-mask/-/vuetify-mask-1.1.2.tgz#f00901d07b2bcc92bb1791a080a8483d27660f31"
+  integrity sha512-VDZscPWGrharoLgBpVIup1KPDZYACN0x4vwIMWst/7cZxDb4gmfQhPxYDcRM1hYw3/F+da4augcIKCP4SYlPLQ==
 
 vuetify@^2.4.0:
   version "2.5.8"

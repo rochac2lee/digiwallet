@@ -4,19 +4,13 @@
       <thead>
         <tr>
           <th class="text-uppercase">Nome</th>
-          <th class="text-center text-uppercase">Tipo</th>
-          <th class="text-center text-uppercase">CPF/CNPJ</th>
+          <th class="text-uppercase">Saldo</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="item in contas" :key="item.contas">
           <td>{{ item.nome }}</td>
-          <td class="text-center">
-            {{ item.tipo_cliente }}
-          </td>
-          <td class="text-center">
-            {{ item.cpf_cnpj }}
-          </td>
+          <td>{{ item.saldo }}</td>
         </tr>
       </tbody>
     </template>
@@ -25,9 +19,12 @@
 
 <script>
 export default {
+  props: {
+    update: { type: Boolean, default: false },
+  },
   data() {
     return {
-      contas: {},
+      contas: {}
     }
   },
   methods: {
@@ -44,6 +41,6 @@ export default {
   },
   mounted() {
     this.getContas()
-  }
+  },
 }
 </script>

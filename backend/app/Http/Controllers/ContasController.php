@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Conta;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ContasController extends Controller
 {
@@ -14,7 +15,26 @@ class ContasController extends Controller
         return response(['status' => 'success', 'total' => sizeof($contas), 'data' => $contas], 200);
     }
 
-        /**
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+
+        $conta = Conta::create([
+            'nome' => $request->nome,
+            'saldo' => $request->saldo
+        ]);
+
+        $conta = json_decode($conta);
+
+        return response(['status' => "success", 'data' => $conta, 'message' => "Conta $request->nome cadastrada com sucesso!"], 201);
+    }
+
+    /**
      * Display the specified resource.
      *
      * @param  int  $id
@@ -31,7 +51,7 @@ class ContasController extends Controller
         }
     }
 
-        /**
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -53,7 +73,7 @@ class ContasController extends Controller
         }
     }
 
-        /**
+    /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
