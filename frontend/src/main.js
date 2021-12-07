@@ -18,6 +18,15 @@ Vue.use(VueCookies)
 import VuetifyMask from "vuetify-mask";  
 Vue.use(VuetifyMask)
 
+export const eventbus = new Vue({
+  methods: {
+      updateLancamentos() {
+          this.$emit('updateLancamentos')
+      }
+      
+  }
+})
+
 Vue.prototype.$http = http
 
 Vue.config.productionTip = false

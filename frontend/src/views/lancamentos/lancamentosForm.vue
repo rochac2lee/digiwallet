@@ -134,6 +134,8 @@
 <script>
 import Money from '@/components/Money.vue'
 
+import { eventbus } from '@/main.js'
+
 export default {
   components: {
     'v-text-field-money': Money,
@@ -168,7 +170,7 @@ export default {
   },
   methods: {
     salvar() {
-      if (this.$refs.form.validate() == true) {
+      if (this.$refs.form.validate() === true) {
         switch (this.tipo_lancamento) {
           case 'Entrada':
             this.lancamento.tipo_fluxo = 'entrada'
@@ -185,7 +187,10 @@ export default {
           res => {
             console.log(res.data.data)
             this.$emit('close')
-            this.$emit('update')
+
+            eventbus.$emit('updateLancamentos')
+
+
           },
           err => console.error(err),
         )

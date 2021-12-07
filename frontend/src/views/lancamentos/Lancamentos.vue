@@ -19,9 +19,14 @@
       :transition="transition"
     >
       <template v-slot:activator>
-        <v-btn @click="dialog = true" v-model="fab" color="primary" fab>
-          <v-icon> {{ mdiPlus }} </v-icon>
-        </v-btn>
+        <v-tooltip left>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn v-bind="attrs" v-on="on" @click="dialog = true" v-model="fab" color="primary" fab>
+              <v-icon> {{ mdiPlus }} </v-icon>
+            </v-btn>
+          </template>
+          <span>Novo Lançamento</span>
+        </v-tooltip>
       </template>
     </v-speed-dial>
   </v-row>

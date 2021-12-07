@@ -66,6 +66,7 @@ class FluxosController extends Controller
 
 
             $request = $request->all();
+            $request['valor'] = str_replace(".", ",", $request['valor']);
             $fluxo = Fluxo::create($request);
 
             $recorrencia = array();
