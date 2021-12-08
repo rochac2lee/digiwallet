@@ -89,7 +89,6 @@
                       <v-text-field
                         type="number"
                         min="0"
-                        :rules="[v => !!v || 'Selecione a quantidade de parcelas']"
                         label="Parcelas"
                         v-model="lancamento.parcelas"
                         required
@@ -108,7 +107,7 @@
                             v-on="on"
                           ></v-text-field>
                         </template>
-                        <v-date-picker locale="pt-br" v-model="date" scrollable>
+                        <v-date-picker locale="pt-br" v-model="date">
                           <v-spacer></v-spacer>
                           <v-btn text color="primary" @click="modal = false"> Cancelar </v-btn>
                           <v-btn text color="primary" @click="$refs.dialog.save(date)"> OK </v-btn>
@@ -122,9 +121,15 @@
           </v-container>
         </v-card-text>
         <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="$emit('closeEdit')"> Cancelar </v-btn>
-          <v-btn color="blue darken-1" text @click="salvar()"> Salvar </v-btn>
+            <v-row justify="space-between">
+              <v-col>
+                <v-btn color="error darken-1" text @click="excluir(), $emit('closeEdit')"> Excluir </v-btn>
+              </v-col>
+              <v-col align="end">
+                <v-btn color="blue darken-1" text @click="$emit('closeEdit')"> Cancelar </v-btn>
+                <v-btn color="primary" text @click="salvar()"> Salvar </v-btn>
+              </v-col>
+            </v-row>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -141,7 +146,7 @@ export default {
     'v-text-field-money': Money,
   },
   props: {
-    dialogEdit: { type: Boolean, default: false }
+    dialogEdit: { type: Boolean, default: false },
   },
   data() {
     return {
@@ -177,21 +182,33 @@ export default {
             break
         }
         this.lancamento.data_referencia = this.date
+        this.lancamento.parcelas = parseInt(this.lancamento.parcelas)
         this.$http.put(
           'fluxos',
           this.lancamento.id,
           this.lancamento,
           res => {
-            console.log(res.data.data)
             this.$emit('close')
 
             eventbus.$emit('updateLancamentos')
-
-
+            
           },
           err => console.error(err),
         )
       }
+    },
+    excluir() {
+      this.$http.delete(
+        'fluxos',
+        this.lancamento.id,
+        res => {
+          this.$emit('close')
+
+          eventbus.$emit('updateLancamentos')
+          this.$emit('closeEdit')
+        },
+        err => console.error(err),
+      )
     },
     getContas() {
       this.$http.get(
@@ -250,19 +267,18 @@ export default {
     this.getClientes()
 
     eventbus.$on('editLancamentos', lancamento => {
-        switch (lancamento.tipo_fluxo) {
-            case "entrada":
-                this.tipo_lancamento = "Entrada"
-                break;
+      switch (lancamento.tipo_fluxo) {
+        case 'entrada':
+          this.tipo_lancamento = 'Entrada'
+          break
 
-            case "saida":
-                this.tipo_lancamento = "Saída"
-                break;
-
-        }
-        this.lancamento = lancamento
-        this.getCategorias(lancamento.categoria_id)
-        this.$emit('openEdit')
+        case 'saida':
+          this.tipo_lancamento = 'Saída'
+          break
+      }
+      this.lancamento = lancamento
+      this.getCategorias(lancamento.categoria_id)
+      this.$emit('openEdit')
     })
   },
 }

@@ -25,7 +25,7 @@ class FluxosController extends Controller
                 $fluxo->conta = Conta::find($fluxo->conta_id)->nome;
             }
 
-            $fluxo->recorrencia = DB::table('recorrencias')
+            $fluxo->recorrencias = DB::table('recorrencias')
                 ->select('*')
                 ->where('fluxo_id', $fluxo->id)
                 ->get();
@@ -43,7 +43,7 @@ class FluxosController extends Controller
             "fluxo_id" => $fluxo->id,
             "valor" => $fluxo->valor,
             "status" => false,
-            "parcela_numero" => $parcela_numero,
+            "parcela_numero" => $parcela_numero+1,
             "data_referencia" => $data_referencia
         ]);
 
@@ -69,7 +69,7 @@ class FluxosController extends Controller
             $request['valor'] = str_replace(".", ",", $request['valor']);
             $fluxo = Fluxo::create($request);
 
-            $recorrencia = array();
+            $recorrencias = array();
 
             if ($fluxo->recorrencia == true) {
                 if ($fluxo->parcelas && $fluxo->parcelas != null) {
@@ -77,17 +77,17 @@ class FluxosController extends Controller
                     $datas = DateRecurrences($fluxo->data_referencia, $fluxo->parcelas);
 
                     for ($i = 0; $i < $fluxo->parcelas; $i++) {
-                        $recorrencia[$i] = $this->newRecorrencia($fluxo, $i, $datas[$i]);
+                        $recorrencias[$i] = $this->newRecorrencia($fluxo, $i, $datas[$i]);
                     }
                 } else {
                     $datas = DateRecurrences($fluxo->data_referencia, 12);
                     for ($i = 0; $i < 12; $i++) {
-                        $recorrencia[$i] = $this->newRecorrencia($fluxo, $i, $datas[$i]);
+                        $recorrencias[$i] = $this->newRecorrencia($fluxo, $i, $datas[$i]);
                     }
                 }
             }
 
-            $fluxo->recorrencia = $recorrencia;
+            $fluxo->recorrencias = $recorrencias;
 
             return response(['status' => "success", 'data' => $fluxo, 'message' => "Dados cadastrados com sucesso!"], 201);
         }

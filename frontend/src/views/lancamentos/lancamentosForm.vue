@@ -89,7 +89,6 @@
                       <v-text-field
                         type="number"
                         min="0"
-                        :rules="[v => !!v || 'Selecione a quantidade de parcelas']"
                         label="Parcelas"
                         v-model="lancamento.parcelas"
                         required
@@ -181,16 +180,13 @@ export default {
             break
         }
         this.lancamento.data_referencia = this.date
+        this.lancamento.parcelas = parseInt(this.lancamento.parcelas)
         this.$http.post(
           'fluxos',
           this.lancamento,
           res => {
-            console.log(res.data.data)
-            this.$emit('close')
-
             eventbus.$emit('updateLancamentos')
-
-
+            this.$emit('closeForm')
           },
           err => console.error(err),
         )
@@ -242,7 +238,7 @@ export default {
     parseDate(date) {
       if (!date) return null
 
-      const [month, day, year] = date.split('/')
+      const [day, month, year] = date.split('/')
       return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
     },
   },
