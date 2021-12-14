@@ -15,7 +15,7 @@ class RecorrenciasController extends Controller
         return response(['status' => 'success', 'total' => sizeof($recorrencias), 'data' => $recorrencias], 200);
     }
 
-        /**
+    /**
      * Display the specified resource.
      *
      * @param  int  $id
@@ -32,7 +32,7 @@ class RecorrenciasController extends Controller
         }
     }
 
-        /**
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -56,7 +56,7 @@ class RecorrenciasController extends Controller
         }
     }
 
-        /**
+    /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id

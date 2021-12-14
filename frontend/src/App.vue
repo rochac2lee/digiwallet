@@ -19,7 +19,6 @@ export default {
     const { route } = useRouter()
 
     const resolveLayout = computed(() => {
-      // Handles initial route
       if (route.value.name === null) return null
 
       if (route.value.meta.layout === 'blank') return 'layout-blank'

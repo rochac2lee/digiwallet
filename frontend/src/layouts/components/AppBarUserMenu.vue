@@ -53,7 +53,7 @@
 
       <v-divider></v-divider>
 
-      <!-- Profile -->
+      <!-- Perfil -->
       <v-list-item link>
         <v-list-item-icon class="me-2">
           <v-icon size="22">
@@ -61,7 +61,7 @@
           </v-icon>
         </v-list-item-icon>
         <v-list-item-content>
-          <v-list-item-title>Profile</v-list-item-title>
+          <v-list-item-title>Perfil</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
 
@@ -73,7 +73,7 @@
           </v-icon>
         </v-list-item-icon>
         <v-list-item-content>
-          <v-list-item-title>Settings</v-list-item-title>
+          <v-list-item-title>Configurações</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
 
@@ -88,7 +88,7 @@
           </v-icon>
         </v-list-item-icon>
         <v-list-item-content>
-          <v-list-item-title>Logout</v-list-item-title>
+          <v-list-item-title>Sair</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
     </v-list>

@@ -29,6 +29,11 @@ const routes = [
     component: () => import('@/views/lancamentos/Lancamentos.vue'),
   },
   {
+    path: '/configs',
+    name: 'configs',
+    component: () => import('@/views/configs/Configs.vue'),
+  },
+  {
     path: '/typography',
     name: 'typography',
     component: () => import('@/views/typography/Typography.vue'),
@@ -59,9 +64,9 @@ const routes = [
     component: () => import('@/views/pages/account-settings/AccountSettings.vue'),
   },
   {
-    path: '/pages/login',
-    name: 'pages-login',
-    component: () => import('@/views/pages/Login.vue'),
+    path: '/login',
+    name: 'login',
+    component: () => import('@/views/Login.vue'),
     meta: {
       layout: 'blank',
     },

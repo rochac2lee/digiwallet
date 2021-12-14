@@ -9,6 +9,9 @@ import store from './store'
 //Importando o axios para todo o projeto
 import http from "@/http";
 
+//Importando o axios para todo o projeto
+import settings from "@/settings";
+
 import VueSession from 'vue-session'
 Vue.use(VueSession)
 
@@ -36,6 +39,7 @@ export const eventbus = new Vue({
 })
 
 Vue.prototype.$http = http
+Vue.prototype.$settings = settings
 
 Vue.config.productionTip = false
 

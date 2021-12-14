@@ -65,6 +65,11 @@
         :to="{ name: 'usuarios' }"
         :icon="icons.mdiAccountCogOutline"
       ></nav-menu-link>
+      <nav-menu-link
+        title="Configurações"
+        :to="{ name: 'configs' }"
+        :icon="icons.mdiCog"
+      ></nav-menu-link>
     </v-list>
   </v-navigation-drawer>
 </template>
@@ -80,7 +85,8 @@ import {
   mdiFileOutline,
   mdiFormSelect,
   mdiAccountCogOutline,
-  mdiAccountCashOutline
+  mdiAccountCashOutline,
+  mdiCog
 } from '@mdi/js'
 import NavMenuSectionTitle from './components/NavMenuSectionTitle.vue'
 import NavMenuGroup from './components/NavMenuGroup.vue'
@@ -109,7 +115,8 @@ export default {
         mdiFileOutline,
         mdiFormSelect,
         mdiAccountCogOutline,
-        mdiAccountCashOutline
+        mdiAccountCashOutline,
+        mdiCog
       },
     }
   },
