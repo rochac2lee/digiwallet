@@ -9,7 +9,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in clientes" :key="item.clientes">
+        <tr v-for="item in clientes" :key="item.clientes" class="pointer" @click="editar(item)">
           <td>{{ item.nome }}</td>
           <td class="text-center">
             {{ item.tipo_cliente }}
@@ -24,6 +24,9 @@
 </template>
 
 <script>
+
+import { eventbus } from '@/main.js'
+
 export default {
   data() {
     return {
@@ -31,6 +34,9 @@ export default {
     }
   },
   methods: {
+    editar(cliente) {
+      eventbus.editClientes(cliente)
+    },
     getClientes() {
       this.$http.get(
         'clientes',
@@ -44,6 +50,15 @@ export default {
   },
   mounted() {
     this.getClientes()
-  }
+    eventbus.$on('updateClientes', () => {
+      this.getClientes()
+      console.log('evento disparado')
+    })
+  },
 }
 </script>
+<style scoped>
+.pointer {
+  cursor: pointer;
+}
+</style>

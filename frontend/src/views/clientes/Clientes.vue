@@ -6,6 +6,7 @@
         <v-card-title>Clientes</v-card-title>
         <ClientesTable></ClientesTable>
         <ClientesForm :dialog="dialog" @closeForm="dialog = false"></ClientesForm>
+        <ClientesEdit :dialogEdit="dialogEdit"  @openEdit="openEdit" @closeEdit="dialogEdit = false"></ClientesEdit>
       </v-card>
     </v-col>
     <v-speed-dial
@@ -35,6 +36,7 @@
 <script>
 import ClientesTable from './ClientesTable.vue'
 import ClientesForm from './ClientesForm.vue'
+import ClientesEdit from './ClientesEdit.vue'
 
 import { mdiPlus } from '@mdi/js'
 
@@ -42,6 +44,7 @@ export default {
   components: {
     ClientesTable,
     ClientesForm,
+    ClientesEdit
   },
   setup() {
     return {
@@ -58,8 +61,14 @@ export default {
       mdiPlus,
 
       dialog: false,
+      dialogEdit: false,
     }
   },
+  methods: {
+    openEdit() {
+      this.dialogEdit = true
+    }
+  }
 }
 </script>
 <style scoped>

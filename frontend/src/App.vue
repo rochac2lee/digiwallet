@@ -30,5 +30,10 @@ export default {
       resolveLayout,
     }
   },
+  beforeCreate: function () {
+    if (!this.$session.exists()) {
+      this.$router.push("login");
+    }
+  },
 }
 </script>

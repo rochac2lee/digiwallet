@@ -188,7 +188,7 @@ export default {
           this.lancamento.id,
           this.lancamento,
           res => {
-            this.$emit('close')
+            this.$emit('closeEdit')
 
             eventbus.$emit('updateLancamentos')
             

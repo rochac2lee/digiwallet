@@ -18,23 +18,27 @@ Vue.use(VueSession)
 import VueCookies from 'vue-cookies'
 Vue.use(VueCookies)
 
-import VuetifyMask from "vuetify-mask";  
+import VuetifyMask from "vuetify-mask";
 Vue.use(VuetifyMask)
 
 export const eventbus = new Vue({
   methods: {
-      updateLancamentos() {
-          this.$emit('updateLancamentos')
-      },
+    updateLancamentos() {
+      this.$emit('updateLancamentos')
+    },
 
-      editLancamentos(lancamento) {
-          this.$emit('editLancamentos', lancamento)
-      },
+    editLancamentos(lancamento) {
+      this.$emit('editLancamentos', lancamento)
+    },
 
-      updateClientes() {
-        this.$emit('updateClientes')
+    updateClientes() {
+      this.$emit('updateClientes')
+    },
+
+    editClientes(cliente) {
+      this.$emit('editClientes', cliente)
     }
-      
+
   }
 })
 

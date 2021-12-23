@@ -87,7 +87,7 @@
             {{ icons.mdiLogoutVariant }}
           </v-icon>
         </v-list-item-icon>
-        <v-list-item-content>
+        <v-list-item-content @click="efetuarLogout()">
           <v-list-item-title>Sair</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
@@ -121,6 +121,16 @@ export default {
         mdiLogoutVariant,
       },
     }
+  },
+  methods: {
+    // setDarkMode() {
+    //   this.$cookies.set('darkmode',)
+    // },
+    efetuarLogout() {
+      this.$session.destroy();
+      this.$store.commit("DESLOGAR_USUARIO");
+      this.$router.push("login");
+    },
   },
   computed: {
     nome() {
