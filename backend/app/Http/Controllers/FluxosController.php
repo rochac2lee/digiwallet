@@ -6,6 +6,7 @@ use App\Models\Categoria;
 use App\Models\Conta;
 use App\Models\Fluxo;
 use App\Models\Recorrencia;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -43,7 +44,7 @@ class FluxosController extends Controller
             "fluxo_id" => $fluxo->id,
             "valor" => $fluxo->valor,
             "status" => false,
-            "parcela_numero" => $parcela_numero+1,
+            "parcela_numero" => $parcela_numero + 1,
             "data_referencia" => $data_referencia
         ]);
 
@@ -71,20 +72,20 @@ class FluxosController extends Controller
 
             $recorrencias = array();
 
+            $firstDate  = new DateTime($fluxo->data_inicio);
+            $secondDate = new DateTime($fluxo->data_fim);
+            $interval   = $firstDate->diff($secondDate);
+            $interval->m = $interval->m + 1;
+            // die();
+
             if ($fluxo->recorrencia == true) {
-                if ($fluxo->parcelas && $fluxo->parcelas != null) {
 
-                    $datas = DateRecurrences($fluxo->data_referencia, $fluxo->parcelas);
+                $datas = DateRecurrences($fluxo->data_inicio, $interval->m);
 
-                    for ($i = 0; $i < $fluxo->parcelas; $i++) {
-                        $recorrencias[$i] = $this->newRecorrencia($fluxo, $i, $datas[$i]);
-                    }
-                } else {
-                    $datas = DateRecurrences($fluxo->data_referencia, 12);
-                    for ($i = 0; $i < 12; $i++) {
-                        $recorrencias[$i] = $this->newRecorrencia($fluxo, $i, $datas[$i]);
-                    }
+                for ($i = 0; $i < $interval->m; $i++) {
+                    $recorrencias[$i] = $this->newRecorrencia($fluxo, $i, $datas[$i]);
                 }
+
             }
 
             $fluxo->recorrencias = $recorrencias;

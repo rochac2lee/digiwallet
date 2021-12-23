@@ -30,7 +30,8 @@ class CreateFluxosTable extends Migration
             $table->integer('status');
             $table->boolean('recorrencia');
             $table->integer('parcelas')->nullable();
-            $table->date('data_referencia')->nullable();
+            $table->date('data_inicio')->nullable();
+            $table->date('data_fim')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
