@@ -76,7 +76,6 @@ class FluxosController extends Controller
             $secondDate = new DateTime($fluxo->data_fim);
             $interval   = $firstDate->diff($secondDate);
             $interval->m = $interval->m + 1;
-            // die();
 
             if ($fluxo->recorrencia == true) {
 
@@ -85,7 +84,6 @@ class FluxosController extends Controller
                 for ($i = 0; $i < $interval->m; $i++) {
                     $recorrencias[$i] = $this->newRecorrencia($fluxo, $i, $datas[$i]);
                 }
-
             }
 
             $fluxo->recorrencias = $recorrencias;
@@ -114,7 +112,42 @@ class FluxosController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $fluxo = Fluxo::find($id);
+
+        $recorrencias = DB::table('recorrencias')
+            ->select('*')
+            ->where('fluxo_id', $fluxo->id)
+            ->get();
+
+        for ($i = 0; $i < sizeof($recorrencias); $i++) {
+            Recorrencia::find($recorrencias[$i]->id)->delete();
+        }
+
+        $request = $request->all();
+        $request['conta_id'] = $request['conta'];
+        unset($request['conta']);
+        $request['valor'] = str_replace(".", ",", $request['valor']);
+        $fluxo->update($request);
+
+        $recorrencias = array();
+
+        $firstDate  = new DateTime($fluxo->data_inicio);
+        $secondDate = new DateTime($fluxo->data_fim);
+        $interval   = $firstDate->diff($secondDate);
+        $interval->m = $interval->m + 1;
+
+        if ($fluxo->recorrencia == true) {
+
+            $datas = DateRecurrences($fluxo->data_inicio, $interval->m);
+
+            for ($i = 0; $i < $interval->m; $i++) {
+                $recorrencias[$i] = $this->newRecorrencia($fluxo, $i, $datas[$i]);
+            }
+        }
+
+        $fluxo->recorrencias = $recorrencias;
+
+        return response(['status' => "success", 'data' => $fluxo, 'message' => "Dados atualizados com sucesso!"], 201);
     }
 
     /**
