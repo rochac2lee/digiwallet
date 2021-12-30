@@ -124,11 +124,10 @@ class FluxosController extends Controller
         }
 
         $request = $request->all();
-        $request['conta_id'] = $request['conta'];
         unset($request['conta']);
+        unset($request['recorrencias']);
         $request['valor'] = str_replace(".", ",", $request['valor']);
-        $fluxo->update($request);
-
+        
         $recorrencias = array();
 
         $firstDate  = new DateTime($fluxo->data_inicio);
@@ -143,7 +142,12 @@ class FluxosController extends Controller
             for ($i = 0; $i < $interval->m; $i++) {
                 $recorrencias[$i] = $this->newRecorrencia($fluxo, $i, $datas[$i]);
             }
+        } else {
+            $request['data_fim'] = null;
         }
+
+        // Atualiza o Fluxo com novos valores
+        $fluxo->update($request);
 
         $fluxo->recorrencias = $recorrencias;
 

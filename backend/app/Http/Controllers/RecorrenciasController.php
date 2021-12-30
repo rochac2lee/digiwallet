@@ -43,6 +43,8 @@ class RecorrenciasController extends Controller
     {
         $recorrencia = Recorrencia::find($id);
 
+        $fluxo = Fluxo::find($recorrencia->fluxo_id);
+
         if (!$recorrencia) {
             return response(['status' => "error", 'data' => '', 'message' => "Dados não encontradoss!"], 404);
         } else if ($request->fluxo_id && !Fluxo::find($request->fluxo_id)) {
@@ -50,6 +52,12 @@ class RecorrenciasController extends Controller
         } else {
 
             $request = $request->all();
+
+            if ($request['status'] === true) {
+                $fluxo->status = 1;
+                $fluxo->update();
+            }
+
             $recorrencia->update($request);
 
             return response(['status' => "success", 'data' => $recorrencia, 'message' => "Dados atualizados com sucesso!"], 200);

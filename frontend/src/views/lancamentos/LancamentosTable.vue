@@ -6,6 +6,7 @@
           <th class="text-center text-uppercase">Tipo</th>
           <th class="text-uppercase">Título</th>
           <th class="text-uppercase">Conta</th>
+          <th class="text-uppercase text-center">Status</th>
           <th class="text-uppercase">Valor</th>
         </tr>
       </thead>
@@ -29,7 +30,10 @@
           </td>
           <td>{{ item.titulo }}</td>
           <td>{{ item.conta }}</td>
-          <td>R$ {{ item.valor }}</td>
+          <td class="text-center">
+            <v-btn rounded small :color="item.status == 0 ? 'secondary' : item.status == 1 ? 'primary' : 'success'" dark> {{ item.status == 0 ? 'Pendente' : item.status == 1 ? 'Pago Parcial' : 'Pago Integral' }} </v-btn>
+          </td>
+          <td>{{ item.recorrencias.length > 0 ? item.recorrencias.length + "x de R$ " + item.valor : "R$ " + item.valor }}</td>
         </tr>
       </tbody>
     </template>
