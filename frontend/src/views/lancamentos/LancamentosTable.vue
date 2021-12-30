@@ -29,7 +29,7 @@
           </td>
           <td>{{ item.titulo }}</td>
           <td>{{ item.conta }}</td>
-          <td>{{ item.valor }}</td>
+          <td>R$ {{ item.valor }}</td>
         </tr>
       </tbody>
     </template>

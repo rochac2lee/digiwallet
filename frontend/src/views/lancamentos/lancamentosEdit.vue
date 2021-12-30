@@ -85,32 +85,55 @@
                     <v-col cols="4">
                       <v-switch v-model="lancamento.recorrencia" label="Recorrente"></v-switch>
                     </v-col>
-                    <v-col cols="4" v-if="lancamento.recorrencia == true">
-                      <v-text-field
-                        type="number"
-                        min="0"
-                        label="Parcelas"
-                        v-model="lancamento.parcelas"
-                        required
-                      ></v-text-field>
-                    </v-col>
                     <v-col cols="4">
-                      <v-dialog ref="dialog" v-model="modal" :return-value.sync="date" persistent width="290px">
+                      <v-dialog
+                        ref="dialogDataInicio"
+                        v-model="modalDataInicio"
+                        :return-value.sync="dataInicio"
+                        persistent
+                        width="290px"
+                      >
                         <template v-slot:activator="{ on, attrs }">
                           <v-text-field
-                            v-model="dateFormatted"
-                            label="Data de Referência"
+                            v-model="dataInicioFormatada"
+                            :label="lancamento.recorrencia == true ? 'Data de Inicio' : 'Data de Referência'"
                             prepend-icon="mdi-calendar"
                             readonly
                             v-bind="attrs"
-                            @blur="date = parseDate(dateFormatted)"
+                            @blur="dataInicio = parseDate(dataInicioFormatada)"
                             v-on="on"
                           ></v-text-field>
                         </template>
-                        <v-date-picker locale="pt-br" v-model="date">
+                        <v-date-picker locale="pt-br" v-model="dataInicio" scrollable>
                           <v-spacer></v-spacer>
-                          <v-btn text color="primary" @click="modal = false"> Cancelar </v-btn>
-                          <v-btn text color="primary" @click="$refs.dialog.save(date)"> OK </v-btn>
+                          <v-btn text color="primary" @click="modalDataInicio = false"> Cancelar </v-btn>
+                          <v-btn text color="primary" @click="$refs.dialogDataInicio.save(dataInicio)"> OK </v-btn>
+                        </v-date-picker>
+                      </v-dialog>
+                    </v-col>
+                    <v-col cols="4" v-if="lancamento.recorrencia == true">
+                      <v-dialog
+                        ref="dialogDataTermino"
+                        v-model="modalDataTermino"
+                        :return-value.sync="dataTermino"
+                        persistent
+                        width="290px"
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field
+                            v-model="dataTerminoFormatada"
+                            label="Data de Término"
+                            prepend-icon="mdi-calendar"
+                            readonly
+                            v-bind="attrs"
+                            @blur="dataTermino = parseDate(dataTerminoFormatada)"
+                            v-on="on"
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker locale="pt-br" v-model="dataTermino" scrollable>
+                          <v-spacer></v-spacer>
+                          <v-btn text color="primary" @click="modalDataTermino = false"> Cancelar </v-btn>
+                          <v-btn text color="primary" @click="$refs.dialogDataTermino.save(dataTermino)"> OK </v-btn>
                         </v-date-picker>
                       </v-dialog>
                     </v-col>
@@ -121,15 +144,15 @@
           </v-container>
         </v-card-text>
         <v-card-actions>
-            <v-row justify="space-between">
-              <v-col>
-                <v-btn color="error darken-1" text @click="excluir(), $emit('closeEdit')"> Excluir </v-btn>
-              </v-col>
-              <v-col align="end">
-                <v-btn color="blue darken-1" text @click="$emit('closeEdit')"> Cancelar </v-btn>
-                <v-btn color="primary" text @click="salvar()"> Salvar </v-btn>
-              </v-col>
-            </v-row>
+          <v-row justify="space-between">
+            <v-col>
+              <v-btn color="error darken-1" text @click="excluir(), $emit('closeEdit')"> Excluir </v-btn>
+            </v-col>
+            <v-col align="end">
+              <v-btn color="blue darken-1" text @click="$emit('closeEdit')"> Cancelar </v-btn>
+              <v-btn color="primary" text @click="salvar()"> Salvar </v-btn>
+            </v-col>
+          </v-row>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -159,12 +182,17 @@ export default {
       focus: false,
       disabled: false,
 
-      modal: false,
+      modalDataInicio: false,
+      modalDataTermino: false,
 
       valid: true,
 
-      date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().substr(0, 10),
-      dateFormatted: this.formatDate(
+      dataInicio: new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().substr(0, 10),
+      dataTermino: new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().substr(0, 10),
+      dataInicioFormatada: this.formatDate(
+        new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().substr(0, 10),
+      ),
+      dataTerminoFormatada: this.formatDate(
         new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().substr(0, 10),
       ),
     }
@@ -181,8 +209,8 @@ export default {
             this.lancamento.tipo_fluxo = 'saida'
             break
         }
-        this.lancamento.data_referencia = this.date
-        this.lancamento.parcelas = parseInt(this.lancamento.parcelas)
+        this.lancamento.data_inicio = this.dataInicio
+        this.lancamento.data_fim = this.dataTermino
         this.$http.put(
           'fluxos',
           this.lancamento.id,
@@ -191,7 +219,6 @@ export default {
             this.$emit('closeEdit')
 
             eventbus.$emit('updateLancamentos')
-            
           },
           err => console.error(err),
         )
@@ -246,20 +273,26 @@ export default {
     parseDate(date) {
       if (!date) return null
 
-      const [month, day, year] = date.split('/')
+      const [day, month, year] = date.split('/')
       return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
     },
   },
 
   computed: {
-    computedDateFormatted() {
-      return this.formatDate(this.date)
+    computedDataInicioFormatada() {
+      return this.formatDate(this.dataInicio)
+    },
+    computedDataTerminoFormatada() {
+      return this.formatDate(this.dataTermino)
     },
   },
 
   watch: {
-    date(val) {
-      this.dateFormatted = this.formatDate(this.date)
+    dataInicio(val) {
+      this.dataInicioFormatada = this.formatDate(this.dataInicio)
+    },
+    dataTermino(val) {
+      this.dataTerminoFormatada = this.formatDate(this.dataTermino)
     },
   },
   mounted() {
@@ -277,6 +310,9 @@ export default {
           break
       }
       this.lancamento = lancamento
+      this.dataInicio = this.lancamento.data_inicio
+      this.dataTermino = this.lancamento.data_fim
+      console.log(this.dataTermino);
       this.getCategorias(lancamento.categoria_id)
       this.$emit('openEdit')
     })
