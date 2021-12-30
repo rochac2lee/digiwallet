@@ -10,7 +10,7 @@
       <tbody>
         <tr v-for="item in contas" :key="item.contas">
           <td>{{ item.nome }}</td>
-          <td>{{ item.saldo }}</td>
+          <td>R$ {{ item.saldo }}</td>
         </tr>
       </tbody>
     </template>

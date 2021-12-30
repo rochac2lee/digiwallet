@@ -12,6 +12,44 @@ class ContasController extends Controller
     {
         $contas = Conta::all();
 
+        foreach ($contas as $conta) {
+            $entradas = DB::table('fluxos')
+                ->select('recorrencias.valor')
+                ->join('recorrencias', 'recorrencias.fluxo_id', 'fluxos.id')
+                ->where('conta_id', $conta->id)
+                ->where('fluxos.tipo_fluxo', 'entrada')
+                ->where('recorrencias.status', true)
+                ->get();
+
+            if ($entradas) {
+                foreach ($entradas as $entrada) {
+                    $conta->entradas += str_replace(",", ".", $entrada->valor);
+                }
+            } else {
+                $conta->entradas = null;
+            }
+
+            $saidas = DB::table('fluxos')
+                ->select('recorrencias.valor')
+                ->join('recorrencias', 'recorrencias.fluxo_id', 'fluxos.id')
+                ->where('conta_id', $conta->id)
+                ->where('fluxos.tipo_fluxo', 'saida')
+                ->where('recorrencias.status', true)
+                ->get();
+
+            if ($saidas) {
+                foreach ($saidas as $saida) {
+                    $conta->saidas += str_replace(",", ".", $saida->valor);
+                }
+            } else {
+                $conta->saidas = null;
+            }
+
+            $conta->saldo = $conta->entradas + $conta->saidas;
+
+            $conta->saldo = number_format($conta->saldo, 2, ',', '');
+        }
+
         return response(['status' => 'success', 'total' => sizeof($contas), 'data' => $contas], 200);
     }
 
