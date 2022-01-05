@@ -30,6 +30,10 @@ class FluxosController extends Controller
                 ->select('*')
                 ->where('fluxo_id', $fluxo->id)
                 ->get();
+
+                foreach ($fluxo->recorrencias as $recorrencia) {
+                    $recorrencia->data_referencia_formatada = date('d/m/Y', strtotime($recorrencia->data_referencia));
+                }
         }
 
         return response(['status' => 'success', 'total' => sizeof($fluxos), 'data' => $fluxos], 200);
