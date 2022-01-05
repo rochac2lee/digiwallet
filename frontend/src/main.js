@@ -27,8 +27,16 @@ export const eventbus = new Vue({
       this.$emit('updateLancamentos')
     },
 
+    updateRecorrencias() {
+      this.$emit('updateRecorrencias')
+    },
+
     editLancamentos(lancamento) {
       this.$emit('editLancamentos', lancamento)
+    },
+
+    editRecorrencias(recorrencia) {
+      this.$emit('editRecorrencias', recorrencia)
     },
 
     updateClientes() {
