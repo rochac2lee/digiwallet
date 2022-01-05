@@ -5,8 +5,11 @@
       <v-card>
         <v-card-title>Lançamentos</v-card-title>
         <LancamentosTable></LancamentosTable>
-        <LancamentosForm :dialog="dialog" @closeForm="dialog = false"></LancamentosForm>
-        <LancamentosEdit :dialogEdit="dialogEdit"  @openEdit="openEdit" @closeEdit="dialogEdit = false"></LancamentosEdit>
+        
+        <LancamentosForm :dialogLancamentos="dialogLancamentos" @closeFormLancamentos="dialogLancamentos = false"></LancamentosForm>
+        <LancamentosEdit :dialogEditLancamentos="dialogEditLancamentos"  @openEditLancamentos="openEditLancamentos" @closeEditLancamentos="dialogEditLancamentos = false"></LancamentosEdit>
+        
+        <RecorrenciasEdit :dialogEditRecorrencias="dialogEditRecorrencias"  @openEditRecorrencias="openEditRecorrencias" @closeEditRecorrencias="dialogEditRecorrencias = false"></RecorrenciasEdit>
       </v-card>
     </v-col>
     <v-speed-dial
@@ -22,7 +25,7 @@
       <template v-slot:activator>
         <v-tooltip left>
           <template v-slot:activator="{ on, attrs }">
-            <v-btn v-bind="attrs" v-on="on" @click="dialog = true" v-model="fab" color="primary" fab>
+            <v-btn v-bind="attrs" v-on="on" @click="dialogLancamentos = true" v-model="fab" color="primary" fab>
               <v-icon> {{ mdiPlus }} </v-icon>
             </v-btn>
           </template>
@@ -37,6 +40,7 @@
 import LancamentosTable from './LancamentosTable.vue'
 import LancamentosForm from './lancamentosForm.vue'
 import LancamentosEdit from './lancamentosEdit.vue'
+import RecorrenciasEdit from './recorrenciasEdit.vue'
 
 import { mdiPlus } from '@mdi/js'
 
@@ -44,7 +48,8 @@ export default {
   components: {
     LancamentosTable,
     LancamentosForm,
-    LancamentosEdit
+    LancamentosEdit,
+    RecorrenciasEdit
   },
   setup() {
     return {
@@ -60,14 +65,18 @@ export default {
       transition: 'slide-y-reverse-transition',
       mdiPlus,
 
-      dialog: false,
-      dialogEdit: false,
+      dialogLancamentos: false,
+      dialogEditLancamentos: false,
+      dialogEditRecorrencias: false,
     }
   },
   methods: {
-    openEdit() {
-      this.dialogEdit = true
-    }
+    openEditLancamentos() {
+      this.dialogEditLancamentos = true
+    },
+    openEditRecorrencias() {
+      this.dialogEditRecorrencias = true
+    },
   }
 }
 </script>

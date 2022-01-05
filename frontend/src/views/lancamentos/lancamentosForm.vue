@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center">
-    <v-dialog v-model="dialog" persistent max-width="600px">
+    <v-dialog v-model="dialogLancamentos" persistent max-width="600px">
       <v-card>
         <v-card-title>
           <span class="text-h5">Novo Lançamento</span>
@@ -133,7 +133,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="$emit('closeForm')"> Cancelar </v-btn>
+          <v-btn color="blue darken-1" text @click="$emit('closeFormLancamentos')"> Cancelar </v-btn>
           <v-btn color="blue darken-1" text @click="salvar()"> Salvar </v-btn>
         </v-card-actions>
       </v-card>
@@ -151,7 +151,7 @@ export default {
     'v-text-field-money': Money,
   },
   props: {
-    dialog: { type: Boolean, default: false },
+    dialogLancamentos: { type: Boolean, default: false },
   },
   data() {
     return {
@@ -202,7 +202,7 @@ export default {
           this.lancamento,
           res => {
             eventbus.$emit('updateLancamentos')
-            this.$emit('closeForm')
+            this.$emit('closeFormLancamentos')
           },
           err => console.error(err),
         )

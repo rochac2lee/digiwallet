@@ -1,9 +1,9 @@
 <template>
   <v-row justify="center">
-    <v-dialog v-model="dialogEdit" persistent max-width="600px">
+    <v-dialog v-model="dialogEditLancamentos" persistent max-width="600px">
       <v-card>
         <v-card-title>
-          <span class="text-h5">Novo Lançamento</span>
+          <span class="text-h5">Editar Lançamento</span>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -137,6 +137,9 @@
                         </v-date-picker>
                       </v-dialog>
                     </v-col>
+                    <v-col cols="4" v-if="lancamento.recorrencia == false">
+                      <v-switch v-model="lancamento.status" :label="lancamento.status == 2 || lancamento.status == true ? 'Pago' : 'Pendente'"></v-switch>
+                    </v-col>
                   </v-row>
                 </v-container>
               </v-row>
@@ -146,10 +149,10 @@
         <v-card-actions>
           <v-row justify="space-between">
             <v-col>
-              <v-btn color="error darken-1" text @click="excluir(), $emit('closeEdit')"> Excluir </v-btn>
+              <v-btn color="error darken-1" text @click="excluir(), $emit('closeEditLancamentos')"> Excluir </v-btn>
             </v-col>
             <v-col align="end">
-              <v-btn color="blue darken-1" text @click="$emit('closeEdit')"> Cancelar </v-btn>
+              <v-btn color="blue darken-1" text @click="$emit('closeEditLancamentos')"> Cancelar </v-btn>
               <v-btn color="primary" text @click="salvar()"> Salvar </v-btn>
             </v-col>
           </v-row>
@@ -169,11 +172,13 @@ export default {
     'v-text-field-money': Money,
   },
   props: {
-    dialogEdit: { type: Boolean, default: false },
+    dialogEditLancamentos: { type: Boolean, default: false },
   },
   data() {
     return {
-      lancamento: {},
+      lancamento: {
+        status: null
+      },
       contas: {},
       clientes: {},
       categorias: [],
@@ -209,16 +214,17 @@ export default {
             this.lancamento.tipo_fluxo = 'saida'
             break
         }
+        this.lancamento.status == true ? this.lancamento.status = 2 : this.lancamento.status = 0
         this.lancamento.data_inicio = this.dataInicio
         this.lancamento.data_fim = this.dataTermino
+
         this.$http.put(
           'fluxos',
           this.lancamento.id,
           this.lancamento,
           res => {
-            this.$emit('closeEdit')
-
             eventbus.$emit('updateLancamentos')
+            this.$emit('closeEditLancamentos')
           },
           err => console.error(err),
         )
@@ -232,7 +238,7 @@ export default {
           this.$emit('close')
 
           eventbus.$emit('updateLancamentos')
-          this.$emit('closeEdit')
+          this.$emit('closeEditLancamentos')
         },
         err => console.error(err),
       )
@@ -314,7 +320,7 @@ export default {
       this.dataTermino = this.lancamento.data_fim
       console.log(this.dataTermino);
       this.getCategorias(lancamento.categoria_id)
-      this.$emit('openEdit')
+      this.$emit('openEditLancamentos')
     })
   },
 }
