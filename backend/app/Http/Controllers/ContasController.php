@@ -13,6 +13,23 @@ class ContasController extends Controller
         $contas = Conta::all();
 
         foreach ($contas as $conta) {
+
+            $entradasAvulsas = DB::table('fluxos')
+                ->select('valor')
+                ->where('conta_id', $conta->id)
+                ->where('tipo_fluxo', 'entrada')
+                ->where('recorrencia', false)
+                ->where('status', 2)
+                ->get();
+
+            if ($entradasAvulsas) {
+                foreach ($entradasAvulsas as $entradaAvulsa) {
+                    $conta->entradasAvulsas += str_replace(",", ".", $entradaAvulsa->valor);
+                }
+            } else {
+                $conta->entradasAvulsas = null;
+            }
+
             $entradas = DB::table('fluxos')
                 ->select('recorrencias.valor')
                 ->join('recorrencias', 'recorrencias.fluxo_id', 'fluxos.id')
@@ -27,6 +44,22 @@ class ContasController extends Controller
                 }
             } else {
                 $conta->entradas = null;
+            }
+
+            $saidasAvulsas = DB::table('fluxos')
+                ->select('valor')
+                ->where('conta_id', $conta->id)
+                ->where('tipo_fluxo', 'saida')
+                ->where('recorrencia', false)
+                ->where('status', 2)
+                ->get();
+
+            if ($saidasAvulsas) {
+                foreach ($saidasAvulsas as $saidaAvulsa) {
+                    $conta->saidasAvulsas += str_replace(",", ".", $saidaAvulsa->valor);
+                }
+            } else {
+                $conta->saidasAvulsas = null;
             }
 
             $saidas = DB::table('fluxos')
@@ -45,7 +78,7 @@ class ContasController extends Controller
                 $conta->saidas = null;
             }
 
-            $conta->saldo = $conta->entradas + $conta->saidas;
+            $conta->saldo = ($conta->entradasAvulsas + $conta->entradas) + ($conta->saidasAvulsas + $conta->saidas);
 
             $conta->saldo = number_format($conta->saldo, 2, ',', '');
         }
