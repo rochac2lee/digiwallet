@@ -37,8 +37,7 @@
                 <v-btn
                   rounded
                   small
-                  :color="item.status == 0 ? 'secondary' : item.status == 1 ? 'primary' : 'success'"
-                  dark
+                  :class="item.status == 0 ? 'grey lighten-2' : item.status == 1 ? 'primary' : 'light-green darken-1 white--text'"
                 >
                   {{ item.status == 0 ? 'Pendente' : item.status == 1 ? 'Recorrências em Aberto' : 'Pago Integral' }}
                 </v-btn>
@@ -62,7 +61,7 @@
                   <v-col v-for="(recorrencia, index) in item.recorrencias" :key="index" cols="12" sm="6" md="3">
                     <v-list>
                       <v-list-item-group>
-                        <v-list-item class="pointer" dark :class="recorrencia.status == true ? 'success' : 'secondary'" @click="editarRecorrencia(recorrencia)">
+                        <v-list-item class="pointer" :class="recorrencia.status == true ? 'success' : 'secondary'" @click="editarRecorrencia(recorrencia)">
                           <v-list-item-icon>
                             <v-avatar color="accent" size="48">
                               <span class="white--text text-h5">{{ recorrencia.parcela_numero }}</span>

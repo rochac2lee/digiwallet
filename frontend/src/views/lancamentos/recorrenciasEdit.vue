@@ -72,7 +72,7 @@
               <v-btn color="error darken-1" text @click="excluir(), $emit('closeEditRecorrencias')"> Excluir </v-btn>
             </v-col>
             <v-col align="end">
-              <v-btn color="blue darken-1" text @click="$emit('closeEditRecorrencias')"> Cancelar </v-btn>
+              <v-btn color="grey darken-1" text @click="$emit('closeEditRecorrencias')"> Cancelar </v-btn>
               <v-btn color="primary" text @click="salvar()"> Salvar </v-btn>
             </v-col>
           </v-row>

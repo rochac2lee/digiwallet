@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title class="align-start">
-      <span class="font-weight-semibold">Principais Indicadores</span>
+      <span class="font-weight-semibold">Indicadores Gerais</span>
       <v-spacer></v-spacer>
       <v-btn
         icon
@@ -22,7 +22,7 @@
     <v-card-text>
       <v-row>
         <v-col
-          v-for="data in statisticsData"
+          v-for="data in indicadoresGerais"
           :key="data.title"
           cols="6"
           md="3"
@@ -61,25 +61,7 @@
 import { mdiAccountOutline, mdiCurrencyUsd, mdiTrendingUp, mdiDotsVertical, mdiLabelOutline } from '@mdi/js'
 
 export default {
-  setup() {
-    const statisticsData = [
-      {
-        title: 'Sales',
-        total: '245k',
-      },
-      {
-        title: 'Customers',
-        total: '12.5k',
-      },
-      {
-        title: 'Product',
-        total: '1.54k',
-      },
-      {
-        title: 'Revenue',
-        total: '$88k',
-      },
-    ]
+  data() {
 
     const resolveStatisticsIconVariation = data => {
       if (data === 'Sales') return { icon: mdiTrendingUp, color: 'primary' }
@@ -91,7 +73,7 @@ export default {
     }
 
     return {
-      statisticsData,
+      indicadoresGerais: {},
       resolveStatisticsIconVariation,
 
       // icons
@@ -103,6 +85,21 @@ export default {
         mdiCurrencyUsd,
       },
     }
+  },
+  methods: {
+    getClientes() {
+      this.$http.get(
+        'clientes',
+        res => {
+          this.indicadoresGerais.title = "Clientes"
+          this.indicadoresGerais.total = res.data.total
+        },
+        err => console.error(err),
+      )
+    },
+  },
+  mounted() {
+    this.getClientes()
   },
 }
 </script>
