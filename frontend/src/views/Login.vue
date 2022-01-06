@@ -76,8 +76,8 @@ export default {
     return {
       isPasswordVisible,
       usuario: {
-        usuario: '',
-        senha: '',
+        usuario: 'admin@digiwallet.com',
+        senha: 'admin',
       },
 
       icons: {
