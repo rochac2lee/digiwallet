@@ -79,6 +79,7 @@ export default {
       //   usuario: 'admin@digiwallet.com',
       //   senha: 'admin',
       // },
+      usuario: {},
 
       icons: {
         mdiEyeOutline,
