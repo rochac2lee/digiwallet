@@ -9,7 +9,7 @@
           <v-container>
             <v-form ref="form" v-model="valid" lazy-validation>
               <v-row>
-                <v-col cols="6">
+                <v-col :cols="clientesHabilitado == false ? '6' : '4'">
                   <v-select
                     :rules="[v => !!v || 'Selecione um tipo de lançamento']"
                     @change="getCategorias()"
@@ -19,7 +19,7 @@
                     dense
                   ></v-select>
                 </v-col>
-                <v-col cols="6" v-if="tipo_lancamento">
+                <v-col cols="6" v-if="tipo_lancamento && clientesHabilitado == false">
                   <v-select
                     v-model="lancamento.cliente_id"
                     :items="clientes"
@@ -29,7 +29,7 @@
                     dense
                   ></v-select>
                 </v-col>
-                <v-col cols="6" v-if="tipo_lancamento">
+                <v-col :cols="clientesHabilitado == false ? '6' : '4'" v-if="tipo_lancamento">
                   <v-select
                     :rules="[v => !!v || 'Selecione uma conta']"
                     v-model="lancamento.conta_id"
@@ -40,7 +40,7 @@
                     dense
                   ></v-select>
                 </v-col>
-                <v-col cols="6" v-if="lancamento.conta_id">
+                <v-col :cols="clientesHabilitado == false ? '6' : '4'" v-if="lancamento.conta_id">
                   <v-select
                     :rules="[v => !!v || 'Selecione uma categoria']"
                     :items="categorias"
@@ -138,7 +138,10 @@
                       </v-dialog>
                     </v-col>
                     <v-col cols="4" v-if="lancamento.recorrencia == false">
-                      <v-switch v-model="lancamento.status" :label="lancamento.status == 2 || lancamento.status == true ? 'Pago' : 'Pendente'"></v-switch>
+                      <v-switch
+                        v-model="lancamento.status"
+                        :label="lancamento.status == 2 || lancamento.status == true ? 'Pago' : 'Pendente'"
+                      ></v-switch>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -177,7 +180,7 @@ export default {
   data() {
     return {
       lancamento: {
-        status: null
+        status: null,
       },
       contas: {},
       clientes: {},
@@ -186,6 +189,7 @@ export default {
       value: null,
       focus: false,
       disabled: false,
+      clientesHabilitado: false,
 
       modalDataInicio: false,
       modalDataTermino: false,
@@ -214,7 +218,7 @@ export default {
             this.lancamento.tipo_fluxo = 'saida'
             break
         }
-        this.lancamento.status == true ? this.lancamento.status = 2 : this.lancamento.status = 0
+        this.lancamento.status == true ? (this.lancamento.status = 2) : (this.lancamento.status = 0)
         this.lancamento.data_inicio = this.dataInicio
         this.lancamento.data_fim = this.dataTermino
 
@@ -303,7 +307,13 @@ export default {
   },
   mounted() {
     this.getContas()
-    this.getClientes()
+    this.$settings.global_configs.forEach(config => {
+      if (config.habilitar_clientes == false) {
+        this.clientesHabilitado = true
+      } else {
+        this.getClientes()
+      }
+    })
 
     eventbus.$on('editLancamentos', lancamento => {
       switch (lancamento.tipo_fluxo) {
@@ -318,7 +328,7 @@ export default {
       this.lancamento = lancamento
       this.dataInicio = this.lancamento.data_inicio
       this.dataTermino = this.lancamento.data_fim
-      this.lancamento.status == 2 ? this.lancamento.status = 2 : this.lancamento.status = 0
+      this.lancamento.status == 2 ? (this.lancamento.status = 2) : (this.lancamento.status = 0)
       this.getCategorias(lancamento.categoria_id)
       this.$emit('openEditLancamentos')
     })

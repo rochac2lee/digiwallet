@@ -9,7 +9,7 @@
           <v-container>
             <v-form ref="form" v-model="valid" lazy-validation>
               <v-row>
-                <v-col cols="6">
+                <v-col :cols="clientesHabilitado == false ? '6' : '4'">
                   <v-select
                     :rules="[v => !!v || 'Selecione um tipo de lançamento']"
                     @change="getCategorias()"
@@ -19,7 +19,7 @@
                     dense
                   ></v-select>
                 </v-col>
-                <v-col cols="6" v-if="tipo_lancamento">
+                <v-col cols="6" v-if="tipo_lancamento && clientesHabilitado == false">
                   <v-select
                     v-model="lancamento.cliente_id"
                     :items="clientes"
@@ -29,7 +29,7 @@
                     dense
                   ></v-select>
                 </v-col>
-                <v-col cols="6" v-if="tipo_lancamento">
+                <v-col :cols="clientesHabilitado == false ? '6' : '4'" v-if="tipo_lancamento">
                   <v-select
                     :rules="[v => !!v || 'Selecione uma conta']"
                     v-model="lancamento.conta_id"
@@ -40,7 +40,7 @@
                     dense
                   ></v-select>
                 </v-col>
-                <v-col cols="6" v-if="lancamento.conta_id">
+                <v-col :cols="clientesHabilitado == false ? '6' : '4'" v-if="lancamento.conta_id">
                   <v-select
                     :rules="[v => !!v || 'Selecione uma categoria']"
                     :items="categorias"
@@ -86,7 +86,13 @@
                       <v-switch v-model="lancamento.recorrencia" label="Recorrente"></v-switch>
                     </v-col>
                     <v-col cols="4">
-                      <v-dialog ref="dialogDataInicio" v-model="modalDataInicio" :return-value.sync="dataInicio" persistent width="290px">
+                      <v-dialog
+                        ref="dialogDataInicio"
+                        v-model="modalDataInicio"
+                        :return-value.sync="dataInicio"
+                        persistent
+                        width="290px"
+                      >
                         <template v-slot:activator="{ on, attrs }">
                           <v-text-field
                             v-model="dataInicioFormatada"
@@ -106,7 +112,13 @@
                       </v-dialog>
                     </v-col>
                     <v-col cols="4" v-if="lancamento.recorrencia == true">
-                      <v-dialog ref="dialogDataTermino" v-model="modalDataTermino" :return-value.sync="dataTermino" persistent width="290px">
+                      <v-dialog
+                        ref="dialogDataTermino"
+                        v-model="modalDataTermino"
+                        :return-value.sync="dataTermino"
+                        persistent
+                        width="290px"
+                      >
                         <template v-slot:activator="{ on, attrs }">
                           <v-text-field
                             v-model="dataTerminoFormatada"
@@ -155,9 +167,9 @@ export default {
   },
   data() {
     return {
-      lancamento: { 
+      lancamento: {
         recorrencia: false,
-        status: 0
+        status: 0,
       },
 
       contas: {},
@@ -167,6 +179,7 @@ export default {
       value: null,
       focus: false,
       disabled: false,
+      clientesHabilitado: false,
 
       modalDataInicio: false,
       modalDataTermino: false,
@@ -278,7 +291,14 @@ export default {
   },
   mounted() {
     this.getContas()
-    this.getClientes()
+
+    this.$settings.global_configs.forEach(config => {
+      if (config.habilitar_clientes == false) {
+        this.clientesHabilitado = true
+      } else {
+        this.getClientes()
+      }
+    })
   },
 }
 </script>
