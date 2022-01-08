@@ -18,6 +18,20 @@ class UsuariosController extends Controller
     {
         $usuarios = Usuario::all();
 
+        foreach ($usuarios as $usuario) {
+            switch ($usuario->perfil) {
+                case 'administrador':
+                    $usuario->perfil = "Administrador";
+                    break;
+                case 'usuario':
+                    $usuario->perfil = "Usuário";
+                    break;
+                case 'cliente':
+                    $usuario->perfil = "Cliente";
+                    break;
+            }
+        }
+
         return response(['status' => 'success', 'total' => sizeof($usuarios), 'data' => $usuarios], 200);
     }
 
