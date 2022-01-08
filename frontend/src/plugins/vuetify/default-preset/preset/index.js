@@ -26,12 +26,3 @@ export default {
     },
   },
 }
-
-// primary: '#9155FD',
-// accent: '#0d6efd',
-// secondary: '#546E7A',
-// success: '#7CB342',
-// info: '#16B1FF',
-// warning: '#FFB400',
-// error: '#FF4C51',
-// white: '#FFFFFF'

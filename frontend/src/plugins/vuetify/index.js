@@ -10,6 +10,7 @@ export default new Vuetify({
     iconfont: 'mdiSvg',
   },
   theme: {
+    dark: true,
     options: {
       customProperties: true,
       variations: false,
