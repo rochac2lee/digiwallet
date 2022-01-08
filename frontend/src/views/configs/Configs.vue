@@ -50,6 +50,7 @@ export default {
         this.configs,
         res => {
           this.configs = res.data.data
+          this.$router.go();
         },
         err => {
           console.error(err)
@@ -59,7 +60,6 @@ export default {
   },
   mounted() {
     this.getConfigs()
-    console.log(this.$settings.global_configs);
   },
 }
 </script>

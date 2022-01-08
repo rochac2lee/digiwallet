@@ -143,6 +143,8 @@ class FluxosController extends Controller
 
         if ($fluxo->recorrencia == true) {
 
+            $request['status'] = $fluxo->status;
+
             $datas = DateRecurrences($fluxo->data_inicio, $interval->m);
 
             for ($i = 0; $i < $interval->m; $i++) {

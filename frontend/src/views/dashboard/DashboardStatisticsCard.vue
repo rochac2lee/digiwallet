@@ -11,7 +11,7 @@
     </v-card-title>
     <v-card-text>
       <v-row>
-        <v-col v-for="data in indicadoresGerais" :key="data.title" cols="6" md="3" class="d-flex align-center">
+        <v-col v-for="data in indicadoresGerais" :key="data.title" cols="6" :md="indicadoresGerais.length == 4 ? 3 : 4" class="d-flex align-center">
           <v-avatar size="44" :color="resolveStatisticsIconVariation(data.title).color" rounded class="elevation-1">
             <v-icon dark color="white" size="30">
               {{ resolveStatisticsIconVariation(data.title).icon }}

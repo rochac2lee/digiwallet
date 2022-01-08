@@ -45,6 +45,14 @@ export const eventbus = new Vue({
 
     editClientes(cliente) {
       this.$emit('editClientes', cliente)
+    },
+
+    updateUsuarios() {
+      this.$emit('updateUsuarios')
+    },
+
+    editUsuarios(usuario) {
+      this.$emit('editUsuarios', usuario)
     }
 
   }

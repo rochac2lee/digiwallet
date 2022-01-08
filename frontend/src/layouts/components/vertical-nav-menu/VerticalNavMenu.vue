@@ -45,6 +45,7 @@
       ></nav-menu-link>
       <nav-menu-section-title title="Espaço do Administrador"></nav-menu-section-title>
       <nav-menu-link
+        v-if="clientesHabilitado == false"
         title="Clientes"
         :to="{ name: 'clientes' }"
         :icon="icons.mdiAccountCashOutline"
@@ -106,6 +107,7 @@ export default {
   },
   setup() {
     return {
+      clientesHabilitado: false,
       icons: {
         mdiHomeOutline,
         mdiAlphaTBoxOutline,
@@ -120,6 +122,13 @@ export default {
       },
     }
   },
+  mounted() {
+    this.$settings.global_configs.forEach(config => {
+      if (config.habilitar_clientes == false) {
+        this.clientesHabilitado = true
+      }
+    })
+  }
 }
 </script>
 
