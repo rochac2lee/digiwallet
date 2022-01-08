@@ -139,6 +139,8 @@ class FluxosController extends Controller
         $interval   = $firstDate->diff($secondDate);
         $interval->m = $interval->m + 1;
 
+        $fluxo->valor = $request['valor'];
+
         if ($fluxo->recorrencia == true) {
 
             $datas = DateRecurrences($fluxo->data_inicio, $interval->m);

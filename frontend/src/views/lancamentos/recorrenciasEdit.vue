@@ -124,8 +124,8 @@ export default {
           this.recorrencia.id,
           this.recorrencia,
           res => {
-            eventbus.$emit('updateRecorrencias')
             this.$emit('closeEditRecorrencias')
+            eventbus.$emit('updateRecorrencias')
           },
           err => console.error(err),
         )

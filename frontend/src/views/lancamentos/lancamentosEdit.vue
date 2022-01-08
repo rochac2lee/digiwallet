@@ -319,7 +319,6 @@ export default {
       this.dataInicio = this.lancamento.data_inicio
       this.dataTermino = this.lancamento.data_fim
       this.lancamento.status == 2 ? this.lancamento.status = 2 : this.lancamento.status = 0
-      console.log(this.dataTermino);
       this.getCategorias(lancamento.categoria_id)
       this.$emit('openEditLancamentos')
     })

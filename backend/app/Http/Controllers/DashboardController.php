@@ -58,8 +58,8 @@ class DashboardController extends Controller
             ]
         );
 
-        $entradas = Fluxo::all()->where('tipo_fluxo', 'entrada');
-        $saidas = Fluxo::all()->where('tipo_fluxo', 'saida');
+        $entradas = Fluxo::all()->where('tipo_fluxo', 'entrada')->take(5);
+        $saidas = Fluxo::all()->where('tipo_fluxo', 'saida')->take(5);
 
 
         return response(['status' => "success", 'indicadoresGerais' => $dashboard, 'lucroLiquidoUltimos6Meses' => $saldos, 'entradas' => $entradas, 'saidas' => $saidas], 200);
