@@ -1,44 +1,24 @@
 <template>
   <v-card>
     <v-card-title class="align-start">
-      <span>Weekly Overview</span>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        icon
-        small
-        class="mt-n2 me-n3"
-      >
-        <v-icon size="22">
-          {{ icons.mdiDotsVertical }}
-        </v-icon>
-      </v-btn>
+      <span>Lucro Líquido</span>
     </v-card-title>
 
-    <v-card-text>
-      <!-- Chart -->
-      <vue-apex-charts
-        :options="chartOptions"
-        :series="chartData"
-        height="210"
-      ></vue-apex-charts>
+    <v-card-subtitle>
+      <span class="font-weight-semibold text--primary me-1">Últimos 6 Meses</span>
+    </v-card-subtitle>
 
+    <v-card-text>
+      <vue-apex-charts :options="chartOptions" :series="series" height="210" />
       <div class="d-flex align-center">
-        <h3 class="text-2xl font-weight-semibold me-4">
-          45%
-        </h3>
-        <span>Your sales perfomance in 45% 🤩 better compare to last month</span>
+        <h3 class="text-2xl font-weight-semibold me-4">{{ percentualLucroLiquido }}%</h3>
+        <span
+          >Parabéns! Nos últimos 6 meses você teve um Lucro Líquido de {{ percentualLucroLiquido }}% 🤩 Continue
+          assim!</span
+        >
       </div>
 
-      <v-btn
-        block
-        color="primary"
-        class="mt-6"
-        outlined
-      >
-        Details
-      </v-btn>
+      <!-- <v-btn block color="primary" class="mt-6" outlined> Ver mais </v-btn> -->
     </v-card-text>
   </v-card>
 </template>
@@ -53,87 +33,68 @@ export default {
   components: {
     VueApexCharts,
   },
-  setup() {
-    const ins = getCurrentInstance()?.proxy
-    const $vuetify = ins && ins.$vuetify ? ins.$vuetify : null
-    const customChartColor = $vuetify.theme.isDark ? '#3b3559' : '#f5f5f5'
+  data() {
+    // const ins = getCurrentInstance()?.proxy
+    // const $vuetify = ins && ins.$vuetify ? ins.$vuetify : null
+    // const customChartColor = $vuetify.theme.isDark ? '#3b3559' : '#f5f5f5'
 
-    const chartOptions = {
-      colors: [
-        customChartColor,
-        customChartColor,
-        customChartColor,
-        customChartColor,
-        $vuetify.theme.currentTheme.primary,
-        customChartColor,
-        customChartColor,
-      ],
-      chart: {
-        type: 'bar',
-        toolbar: {
+    return {
+      chartOptions: {
+        chart: {
+          type: 'area',
+          toolbar: {
+            show: false,
+          },
+          offsetX: -15,
+        },
+        dataLabels: {
+          enabled: false,
+        },
+        legend: {
           show: false,
         },
-        offsetX: -15,
-      },
-      plotOptions: {
-        bar: {
-          columnWidth: '40%',
-          distributed: true,
-          borderRadius: 8,
-          startingShape: 'rounded',
-          endingShape: 'rounded',
+        xaxis: {
+          type: 'category',
+          categories: this.getLastMonths(),
+          axisBorder: {
+            show: true,
+          },
+          axisTicks: {
+            show: false,
+          },
+          tickPlacement: 'on',
+          labels: {
+            show: true,
+            style: {
+              fontSize: '12px',
+            },
+          },
         },
-      },
-      dataLabels: {
-        enabled: false,
-      },
-      legend: {
-        show: false,
-      },
-      xaxis: {
-        categories: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
-        axisBorder: {
-          show: false,
+        yaxis: {
+          show: true,
+          tickAmount: 4,
+          labels: {
+            offsetY: 3,
+            formatter: value => `R$ ${value}`,
+          },
         },
-        axisTicks: {
-          show: false,
+        stroke: {
+          width: [2, 2],
         },
-        tickPlacement: 'on',
-        labels: {
-          show: false,
-          style: {
-            fontSize: '12px',
+        grid: {
+          strokeDashArray: 12,
+          padding: {
+            right: 0,
           },
         },
       },
-      yaxis: {
-        show: true,
-        tickAmount: 4,
-        labels: {
-          offsetY: 3,
-          formatter: value => `$${value}`,
+      series: [
+        {
+          name: 'Lucro Líquido',
+          data: [],
         },
-      },
-      stroke: {
-        width: [2, 2],
-      },
-      grid: {
-        strokeDashArray: 12,
-        padding: {
-          right: 0,
-        },
-      },
-    }
-
-    const chartData = [
-      {
-        data: [40, 60, 50, 60, 75, 60, 50, 65],
-      },
-    ]
-
-    return {
-      chartOptions,
-      chartData,
+      ],
+      percentualLucroLiquido: null,
 
       icons: {
         mdiDotsVertical,
@@ -141,6 +102,58 @@ export default {
         mdiCurrencyUsd,
       },
     }
+  },
+  methods: {
+    getDashboard() {
+      this.$http.get(
+        'dashboard',
+        res => {
+          this.lucroLiquidoUltimos6Meses = res.data.lucroLiquidoUltimos6Meses
+
+          var data = []
+
+          var percentual = 0
+
+          this.lucroLiquidoUltimos6Meses.forEach(saldo => {
+            data.push(saldo.total)
+
+            percentual = percentual + parseFloat(saldo.total)
+          })
+
+          if (this.lucroLiquidoUltimos6Meses && this.lucroLiquidoUltimos6Meses.length)
+            percentual = percentual / this.lucroLiquidoUltimos6Meses.length
+
+          this.series[0].data = data
+          this.percentualLucroLiquido = percentual
+        },
+        err => console.error(err),
+      )
+    },
+    getLastMonths() {
+      var monthNames = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
+
+      var today = new Date()
+      var d
+      var month
+      var year
+
+      var periodo = []
+
+      for (var i = 6; i > 0; i -= 1) {
+        d = new Date(today.getFullYear(), today.getMonth() - i, 1)
+        month = monthNames[d.getMonth()]
+        year = d.getFullYear().toString().substr(-2)
+        periodo[i] = month + '/' + year
+      }
+
+      periodo = periodo.reverse()
+
+      // this.chartOptions.xaxis.categories = periodo
+      return periodo
+    },
+  },
+  mounted() {
+    this.getDashboard()
   },
 }
 </script>

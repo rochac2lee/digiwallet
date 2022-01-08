@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\Conta;
+use Illuminate\Support\Facades\DB;
+
 function base64url_encode($data)
 {
     // First of all you should encode $data to Base64 string
@@ -92,17 +95,151 @@ function DateRecurrences(String $date, Int $qtd)
     return $dates;
 }
 
-function except($request){
+function except($request)
+{
     if (!empty($request->query()['except']) && $request->query()['except'] == 'true') {
-        exec();
+        //exec();
     }
 }
 
-function jwt_decode($token) {
+function jwt_decode($token)
+{
     $tokenParts = explode(".", $token);
     $tokenHeader = base64_decode($tokenParts[0]);
     $tokenPayload = base64_decode($tokenParts[1]);
     $jwtHeader = json_decode($tokenHeader);
     $jwtPayload = json_decode($tokenPayload);
     return $jwtPayload;
+}
+
+function saldos($periodoIni = null, $periodoFim = null)
+{
+    $contas = Conta::all();
+    $totalEntradas = 0;
+    $totalSaidas = 0;
+    $total = 0;
+
+    foreach ($contas as $conta) {
+        // echo $periodoIni." - ".$periodoFim."\n";
+
+        if ($periodoIni != null && $periodoFim != null) {
+            $entradasAvulsas = DB::table('fluxos')
+                ->select('valor')
+                ->whereBetween('data_inicio', [$periodoIni, $periodoFim])
+                ->where('conta_id', $conta->id)
+                ->where('tipo_fluxo', 'entrada')
+                ->where('recorrencia', false)
+                ->where('status', 2)
+                ->get();
+        } else {
+            $entradasAvulsas = DB::table('fluxos')
+                ->select('valor')
+                ->where('conta_id', $conta->id)
+                ->where('tipo_fluxo', 'entrada')
+                ->where('recorrencia', false)
+                ->where('status', 2)
+                ->get();
+        }
+
+        if ($entradasAvulsas) {
+            foreach ($entradasAvulsas as $entradaAvulsa) {
+                $conta->entradasAvulsas += str_replace(",", ".", $entradaAvulsa->valor);
+            }
+        } else {
+            $conta->entradasAvulsas = null;
+        }
+
+        if ($periodoIni != null && $periodoFim != null) {
+            $entradas = DB::table('fluxos')
+                ->select('recorrencias.valor')
+                ->whereBetween('recorrencias.data_referencia', [$periodoIni, $periodoFim])
+                ->join('recorrencias', 'recorrencias.fluxo_id', 'fluxos.id')
+                ->where('conta_id', $conta->id)
+                ->where('fluxos.tipo_fluxo', 'entrada')
+                ->where('recorrencias.status', true)
+                ->get();
+        } else {
+            $entradas = DB::table('fluxos')
+                ->select('recorrencias.valor')
+                ->join('recorrencias', 'recorrencias.fluxo_id', 'fluxos.id')
+                ->where('conta_id', $conta->id)
+                ->where('fluxos.tipo_fluxo', 'entrada')
+                ->where('recorrencias.status', true)
+                ->get();
+        }
+
+        if ($entradas) {
+            foreach ($entradas as $entrada) {
+                $conta->entradas += str_replace(",", ".", $entrada->valor);
+            }
+        } else {
+            $conta->entradas = null;
+        }
+
+        if ($periodoIni != null && $periodoFim != null) {
+            $saidasAvulsas = DB::table('fluxos')
+                ->select('valor')
+                ->whereBetween('data_inicio', [$periodoIni, $periodoFim])
+                ->where('conta_id', $conta->id)
+                ->where('tipo_fluxo', 'saida')
+                ->where('recorrencia', false)
+                ->where('status', 2)
+                ->get();
+        } else {
+            $saidasAvulsas = DB::table('fluxos')
+                ->select('valor')
+                ->where('conta_id', $conta->id)
+                ->where('tipo_fluxo', 'saida')
+                ->where('recorrencia', false)
+                ->where('status', 2)
+                ->get();
+        }
+
+        if ($saidasAvulsas) {
+            foreach ($saidasAvulsas as $saidaAvulsa) {
+                $conta->saidasAvulsas += str_replace(",", ".", $saidaAvulsa->valor);
+            }
+        } else {
+            $conta->saidasAvulsas = null;
+        }
+
+        if ($periodoIni != null && $periodoFim != null) {
+            $saidas = DB::table('fluxos')
+                ->select('recorrencias.valor')
+                ->whereBetween('recorrencias.data_referencia', [$periodoIni, $periodoFim])
+                ->join('recorrencias', 'recorrencias.fluxo_id', 'fluxos.id')
+                ->where('conta_id', $conta->id)
+                ->where('fluxos.tipo_fluxo', 'saida')
+                ->where('recorrencias.status', true)
+                ->get();
+        } else {
+            $saidas = DB::table('fluxos')
+                ->select('recorrencias.valor')
+                ->join('recorrencias', 'recorrencias.fluxo_id', 'fluxos.id')
+                ->where('conta_id', $conta->id)
+                ->where('fluxos.tipo_fluxo', 'saida')
+                ->where('recorrencias.status', true)
+                ->get();
+        }
+
+        if ($saidas) {
+            foreach ($saidas as $saida) {
+                $conta->saidas += str_replace(",", ".", $saida->valor);
+            }
+        } else {
+            $conta->saidas = null;
+        }
+
+        $totalEntradas = $totalEntradas + ($conta->entradas + $conta->entradasAvulsas);
+        $totalSaidas = $totalSaidas + ($conta->saidas + $conta->saidasAvulsas);
+        $total = ($totalEntradas - $totalSaidas);
+
+        return [
+            "data" => date("m/y", strtotime($periodoIni)),
+            "entradas" => number_format($totalEntradas, 2, ',', ''),
+            "saidas" => number_format($totalSaidas, 2, ',', ''),
+            // "total" => number_format($total, 2, ',', ''),
+            "total" => number_format($total, 2, '.', ''),
+        ];
+    }
 }

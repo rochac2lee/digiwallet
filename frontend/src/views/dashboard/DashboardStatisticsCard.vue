@@ -3,43 +3,18 @@
     <v-card-title class="align-start">
       <span class="font-weight-semibold">Indicadores Gerais</span>
       <v-spacer></v-spacer>
-      <v-btn
-        icon
-        small
-        class="me-n3 mt-n2"
-      >
+      <v-btn icon small class="me-n3 mt-n2">
         <v-icon>
           {{ icons.mdiDotsVertical }}
         </v-icon>
       </v-btn>
     </v-card-title>
-
-    <v-card-subtitle class="mb-8 mt-n5">
-      <span class="font-weight-semibold text--primary me-1">Total 48.5% Growth</span>
-      <span>😎 this month</span>
-    </v-card-subtitle>
-
     <v-card-text>
       <v-row>
-        <v-col
-          v-for="data in indicadoresGerais"
-          :key="data.title"
-          cols="6"
-          md="3"
-          class="d-flex align-center"
-        >
-          <v-avatar
-            size="44"
-            :color="resolveStatisticsIconVariation (data.title).color"
-            rounded
-            class="elevation-1"
-          >
-            <v-icon
-              dark
-              color="white"
-              size="30"
-            >
-              {{ resolveStatisticsIconVariation (data.title).icon }}
+        <v-col v-for="data in indicadoresGerais" :key="data.title" cols="6" md="3" class="d-flex align-center">
+          <v-avatar size="44" :color="resolveStatisticsIconVariation(data.title).color" rounded class="elevation-1">
+            <v-icon dark color="white" size="30">
+              {{ resolveStatisticsIconVariation(data.title).icon }}
             </v-icon>
           </v-avatar>
           <div class="ms-3">
@@ -58,16 +33,24 @@
 
 <script>
 // eslint-disable-next-line object-curly-newline
-import { mdiAccountOutline, mdiCurrencyUsd, mdiTrendingUp, mdiDotsVertical, mdiLabelOutline } from '@mdi/js'
+import {
+  mdiAccountOutline,
+  mdiAccount,
+  mdiCashPlus,
+  mdiCashMinus,
+  mdiCurrencyUsd,
+  mdiTrendingUp,
+  mdiDotsVertical,
+  mdiLabelOutline,
+} from '@mdi/js'
 
 export default {
   data() {
-
     const resolveStatisticsIconVariation = data => {
-      if (data === 'Sales') return { icon: mdiTrendingUp, color: 'primary' }
-      if (data === 'Customers') return { icon: mdiAccountOutline, color: 'success' }
-      if (data === 'Product') return { icon: mdiLabelOutline, color: 'warning' }
-      if (data === 'Revenue') return { icon: mdiCurrencyUsd, color: 'info' }
+      if (data === 'Usuários') return { icon: mdiAccount, color: 'info' }
+      if (data === 'Clientes') return { icon: mdiAccountOutline, color: 'primary' }
+      if (data === 'Entradas') return { icon: mdiCashPlus, color: 'success' }
+      if (data === 'Saídas') return { icon: mdiCashMinus, color: 'warning' }
 
       return { icon: mdiAccountOutline, color: 'success' }
     }
@@ -80,26 +63,27 @@ export default {
       icons: {
         mdiDotsVertical,
         mdiTrendingUp,
+        mdiAccount,
         mdiAccountOutline,
-        mdiLabelOutline,
+        mdiCashPlus,
+        mdiCashMinus,
         mdiCurrencyUsd,
       },
     }
   },
   methods: {
-    getClientes() {
+    getDashboard() {
       this.$http.get(
-        'clientes',
+        'dashboard',
         res => {
-          this.indicadoresGerais.title = "Clientes"
-          this.indicadoresGerais.total = res.data.total
+          this.indicadoresGerais = res.data.indicadoresGerais
         },
         err => console.error(err),
       )
     },
   },
   mounted() {
-    this.getClientes()
+    this.getDashboard()
   },
 }
 </script>

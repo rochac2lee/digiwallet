@@ -11,8 +11,11 @@ $primary-shade--dark: #e7e3fc;
 $shadow-color--light: $primary-shade--light;
 $shadow-color--dark: #131120;
 
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@700&display=swap');
+
 // Typography
-$body-font-family: 'Inter', sans-serif;
+$body-font-family: 'Nunito Sans', sans-serif;
 
 @import '~vuetify/src/styles/styles.sass';
 
