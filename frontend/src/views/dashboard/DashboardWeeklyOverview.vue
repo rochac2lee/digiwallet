@@ -124,7 +124,7 @@ export default {
             percentual = percentual / this.lucroLiquidoUltimos6Meses.length
 
           this.series[0].data = data
-          this.percentualLucroLiquido = percentual
+          this.percentualLucroLiquido = parseInt(percentual)
         },
         err => console.error(err),
       )
