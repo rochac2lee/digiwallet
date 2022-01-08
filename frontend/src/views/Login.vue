@@ -75,10 +75,10 @@ export default {
 
     return {
       isPasswordVisible,
-      usuario: {
-        usuario: 'admin@digiwallet.com',
-        senha: 'admin',
-      },
+      // usuario: {
+      //   usuario: 'admin@digiwallet.com',
+      //   senha: 'admin',
+      // },
 
       icons: {
         mdiEyeOutline,
