@@ -37,7 +37,7 @@
                 <v-btn
                   rounded
                   small
-                  :class="item.status == 0 ? 'grey lighten-2' : item.status == 1 ? 'primary' : 'light-green darken-1 white--text'"
+                  :class="item.status == 0 ? 'grey lighten-2 black--text' : item.status == 1 ? 'primary' : 'light-green darken-1 white--text'"
                 >
                   {{ item.status == 0 ? 'Pendente' : item.status == 1 ? 'Recorrências em Aberto' : 'Pago Integral' }}
                 </v-btn>
