@@ -66,7 +66,7 @@
       </v-list-item>
 
       <!-- Settings -->
-      <v-list-item link>
+      <v-list-item link :to="{ name: 'configs' }">
         <v-list-item-icon class="me-2">
           <v-icon size="22">
             {{ icons.mdiCogOutline }}
