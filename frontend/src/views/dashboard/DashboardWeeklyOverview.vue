@@ -65,6 +65,8 @@ export default {
           tickPlacement: 'on',
           labels: {
             show: true,
+            rotate: -45,
+            rotateAlways: true,
             style: {
               fontSize: '12px',
             },
@@ -139,10 +141,11 @@ export default {
 
       var periodo = []
 
-      for (var i = 6; i > 0; i -= 1) {
+      for (var i = 5; i >= 0; i -= 1) {
         d = new Date(today.getFullYear(), today.getMonth() - i, 1)
         month = monthNames[d.getMonth()]
         year = d.getFullYear().toString().substr(-2)
+        console.log(month + '/' + year);
         periodo[i] = month + '/' + year
       }
 
