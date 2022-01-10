@@ -5,7 +5,7 @@
         <tr>
           <th class="text-center text-uppercase">Tipo</th>
           <th class="text-uppercase">Título</th>
-          <th class="text-uppercase">Conta</th>
+          <th class="text-uppercase">Cliente</th>
           <th class="text-uppercase text-center">Status</th>
           <th class="text-uppercase">Valor</th>
           <th class="text-uppercase"></th>
@@ -32,7 +32,7 @@
                 </v-tooltip>
               </td>
               <td>{{ item.titulo }}</td>
-              <td>{{ item.conta }}</td>
+              <td>{{ item.cliente }}</td>
               <td class="text-center">
                 <v-btn
                   rounded

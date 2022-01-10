@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Categoria;
+use App\Models\Cliente;
 use App\Models\Conta;
 use App\Models\Fluxo;
 use App\Models\Recorrencia;
@@ -24,6 +25,14 @@ class FluxosController extends Controller
         foreach ($fluxos as $fluxo) {
             if ($fluxo->conta_id) {
                 $fluxo->conta = Conta::find($fluxo->conta_id)->nome;
+            }
+
+            if ($fluxo->cliente_id) {
+                $fluxo->cliente = Cliente::find($fluxo->cliente_id)->nome;
+                if (strlen($fluxo->cliente) > 10)
+                $fluxo->cliente  = substr($fluxo->cliente , 0, 12) . '...';
+            } else {
+                $fluxo->cliente = "N/A";
             }
 
             $fluxo->recorrencias = DB::table('recorrencias')

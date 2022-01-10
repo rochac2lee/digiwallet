@@ -1,7 +1,7 @@
 const { mergeSassVariables } = require('@vuetify/cli-plugin-utils')
 
 module.exports = {
-  publicPath: process.env.NODE_ENV === 'production' ? '/demo/digiwallet-vuetify-vuejs-admin-template-free/demo' : '/',
+  publicPath: process.env.NODE_ENV === 'production' ? '/' : '/',
   lintOnSave: false,
   transpileDependencies: ['vuetify'],
   chainWebpack: config => {
