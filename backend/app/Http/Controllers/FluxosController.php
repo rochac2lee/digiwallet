@@ -138,6 +138,7 @@ class FluxosController extends Controller
 
         $request = $request->all();
         unset($request['conta']);
+        unset($request['cliente']);
         unset($request['recorrencias']);
         $request['valor'] = str_replace(".", ",", $request['valor']);
         
