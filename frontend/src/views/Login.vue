@@ -25,6 +25,7 @@
               v-model="usuario.usuario"
               outlined
               label="Email"
+              name="email"
               placeholder="john@example.com"
               hide-details
               class="mb-3"
@@ -35,10 +36,12 @@
               outlined
               :type="isPasswordVisible ? 'text' : 'password'"
               label="Senha"
+              name="password"
               placeholder="············"
               :append-icon="isPasswordVisible ? icons.mdiEyeOffOutline : icons.mdiEyeOutline"
               hide-details
               @click:append="isPasswordVisible = !isPasswordVisible"
+              @keypress.enter="efetuarLogin()"
             ></v-text-field>
 
             <v-btn block color="primary" class="mt-6" @click="efetuarLogin()"> Login </v-btn>
@@ -63,18 +66,17 @@
 </template>
 
 <script>
-// eslint-disable-next-line object-curly-newline
+// eslint-disable-next-line object-curlfalsey-newline
 import { mdiFacebook, mdiTwitter, mdiGithub, mdiGoogle, mdiEyeOutline, mdiEyeOffOutline } from '@mdi/js'
 import { ref } from '@vue/composition-api'
 
 export default {
   data() {
-    const isPasswordVisible = ref(false)
     const email = ref('')
     const password = ref('')
 
     return {
-      isPasswordVisible,
+      isPasswordVisible: false,
       // usuario: {
       //   usuario: 'admin@digiwallet.com',
       //   senha: 'admin',
