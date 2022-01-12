@@ -1,36 +1,31 @@
 <template>
-  <v-simple-table>
-    <template v-slot:default>
-      <thead>
-        <tr>
-          <th class="text-uppercase">Nome</th>
-          <th class="text-center text-uppercase">Tipo</th>
-          <th class="text-center text-uppercase">CPF/CNPJ</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="item in clientes" :key="item.clientes" class="pointer" @click="editar(item)">
-          <td>{{ item.nome }}</td>
-          <td class="text-center">
-            {{ item.tipo_cliente }}
-          </td>
-          <td class="text-center">
-            {{ item.cpf_cnpj }}
-          </td>
-        </tr>
-      </tbody>
-    </template>
+  <v-data-table 
+    :headers="headers" 
+    :items="clientes"
+    :loading="loading" 
+    :loading-text="loading_text" 
+    :footer-props="footer_prop"></v-data-table>
+
   </v-simple-table>
 </template>
 
 <script>
-
 import { eventbus } from '@/main.js'
 
 export default {
   data() {
     return {
-      clientes: {},
+      headers: [
+        { text: 'Nome', value: 'nome' },
+        { text: 'Tipo', value: 'tipo_cliente' },
+        { text: 'CPF/CNPJ', value: 'cpf_cnpj' },
+      ],
+      loading: true,
+      loading_text: 'Carregando...',
+      footer_prop: {
+        'items-per-page-text':'Itens por página'
+      },
+      clientes: [],
     }
   },
   methods: {
@@ -43,8 +38,13 @@ export default {
         res => {
           console.log(res.data.data)
           this.clientes = res.data.data
+          this.loading = !this.loading
         },
-        err => console.error(err),
+        err => {
+          console.error(err)
+          this.loading = !this.loading
+          this.loading_text = 'Erro ao carregar as informações'
+        },
       )
     },
   },
