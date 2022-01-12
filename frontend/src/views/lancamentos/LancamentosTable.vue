@@ -18,7 +18,7 @@
               <td class="text-center" v-if="item.tipo_fluxo == 'entrada'">
                 <v-tooltip right>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-icon v-bind="attrs" v-on="on">{{ mdiCashPlus }}</v-icon>
+                    <v-icon color="success" v-bind="attrs" v-on="on">{{ mdiCashPlus }}</v-icon>
                   </template>
                   <span>Entrada</span>
                 </v-tooltip>
@@ -26,7 +26,7 @@
               <td class="text-center" v-else>
                 <v-tooltip right>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-icon v-bind="attrs" v-on="on">{{ mdiCashMinus }}</v-icon>
+                    <v-icon color="warning" v-bind="attrs" v-on="on">{{ mdiCashMinus }}</v-icon>
                   </template>
                   <span>Saída</span>
                 </v-tooltip>

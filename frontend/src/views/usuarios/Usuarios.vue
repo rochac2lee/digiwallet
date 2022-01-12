@@ -14,6 +14,7 @@
     <v-speed-dial
       v-model="fab"
       :top="top"
+      :fixed="fixed"
       :bottom="bottom"
       :right="right"
       :left="left"
@@ -51,8 +52,9 @@ export default {
   setup() {
     return {
       direction: 'top',
-      fab: false,
+      fab: true,
       fling: false,
+      fixed: true,
       hover: false,
       tabs: null,
       top: false,
@@ -73,12 +75,3 @@ export default {
   },
 }
 </script>
-<style scoped>
-.v-speed-dial {
-  position: absolute;
-}
-
-.v-btn--floating {
-  position: relative;
-}
-</style>
