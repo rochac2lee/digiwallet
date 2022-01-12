@@ -11,10 +11,7 @@
   >
     <!-- Navigation Header -->
     <div class="vertical-nav-header d-flex items-center ps-6 pe-5 pt-5 pb-2">
-      <router-link
-        to="/"
-        class="d-flex align-center text-decoration-none"
-      >
+      <router-link to="/" class="d-flex align-center text-decoration-none">
         <v-img
           :src="require('@/assets/images/logos/wallet-46.svg')"
           max-height="30px"
@@ -25,24 +22,14 @@
           class="app-logo me-3"
         ></v-img>
         <v-slide-x-transition>
-          <h2 class="app-title text--primary">
-            Digiwallet
-          </h2>
+          <h2 class="app-title text--primary">Digiwallet</h2>
         </v-slide-x-transition>
       </router-link>
     </div>
 
     <!-- Navigation Items -->
-    <v-list
-      expand
-      rounded
-      class="vertical-nav-menu-items"
-    >
-      <nav-menu-link
-        title="Dashboard"
-        :to="{ name: 'dashboard' }"
-        :icon="icons.mdiHomeOutline"
-      ></nav-menu-link>
+    <v-list expand rounded class="vertical-nav-menu-items">
+      <nav-menu-link title="Dashboard" :to="{ name: 'dashboard' }" :icon="icons.mdiHomeOutline"></nav-menu-link>
       <nav-menu-section-title title="Espaço do Administrador"></nav-menu-section-title>
       <nav-menu-link
         v-if="clientesHabilitado == false"
@@ -55,22 +42,10 @@
         :to="{ name: 'lancamentos' }"
         :icon="icons.mdiAccountCashOutline"
       ></nav-menu-link>
-      <nav-menu-link
-        title="Contas"
-        :to="{ name: 'contas' }"
-        :icon="icons.mdiCreditCardOutline"
-      ></nav-menu-link>
+      <nav-menu-link title="Contas" :to="{ name: 'contas' }" :icon="icons.mdiCreditCardOutline"></nav-menu-link>
       <nav-menu-section-title title="Configurações"></nav-menu-section-title>
-      <nav-menu-link
-        title="Usuários"
-        :to="{ name: 'usuarios' }"
-        :icon="icons.mdiAccountCogOutline"
-      ></nav-menu-link>
-      <nav-menu-link
-        title="Configurações"
-        :to="{ name: 'configs' }"
-        :icon="icons.mdiCog"
-      ></nav-menu-link>
+      <nav-menu-link title="Usuários" :to="{ name: 'usuarios' }" :icon="icons.mdiAccountCogOutline"></nav-menu-link>
+      <nav-menu-link title="Configurações" :to="{ name: 'configs' }" :icon="icons.mdiCog"></nav-menu-link>
     </v-list>
   </v-navigation-drawer>
 </template>
@@ -87,7 +62,7 @@ import {
   mdiFormSelect,
   mdiAccountCogOutline,
   mdiAccountCashOutline,
-  mdiCog
+  mdiCog,
 } from '@mdi/js'
 import NavMenuSectionTitle from './components/NavMenuSectionTitle.vue'
 import NavMenuGroup from './components/NavMenuGroup.vue'
@@ -118,17 +93,15 @@ export default {
         mdiFormSelect,
         mdiAccountCogOutline,
         mdiAccountCashOutline,
-        mdiCog
+        mdiCog,
       },
     }
   },
   mounted() {
-    this.$settings.global_configs.forEach(config => {
-      if (config.habilitar_clientes == false) {
-        this.clientesHabilitado = true
-      }
-    })
-  }
+    if (this.$cookies.get('habilitar_clientes') == false) {
+      this.clientesHabilitado = true
+    }
+  },
 }
 </script>
 

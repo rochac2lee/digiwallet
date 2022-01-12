@@ -4,16 +4,16 @@ import VueCookies from "vue-cookies"
 
 Vue.use(VueCookies)
 
-const API_HOST = "digiwalletapi.encode.dev.br"
+const API_HOST = "https://digiwalletapi.encode.dev.br"
 
-// const API_HOST = window.location.hostname + ":8000";
+// const API_HOST = "http://" + window.location.hostname + ":8000";
 
 console.log(window.location);
 
 const API_REST = "api"
 
 const api = axios.create({
-    baseURL: `https://${API_HOST}/${API_REST}`
+    baseURL: `${API_HOST}/${API_REST}`
 })
 
 const config = () => ({

@@ -37,6 +37,8 @@ export default {
         'configs',
         res => {
           this.configs = res.data.data[0]
+
+          this.$cookies.set('habilitar_clientes', this.configs.habilitar_clientes)
         },
         err => {
           console.error(err)
@@ -50,7 +52,9 @@ export default {
         this.configs,
         res => {
           this.configs = res.data.data
-          this.$router.go();
+          console.log(this.configs.habilitar_clientes);
+          this.$cookies.set('habilitar_clientes', this.configs.habilitar_clientes)
+          this.$router.go()
         },
         err => {
           console.error(err)

@@ -307,13 +307,8 @@ export default {
   },
   mounted() {
     this.getContas()
-    this.$settings.global_configs.forEach(config => {
-      if (config.habilitar_clientes == false) {
-        this.clientesHabilitado = true
-      } else {
-        this.getClientes()
-      }
-    })
+
+    this.$cookies.get('habilitar_clientes') == false ? (this.clientesHabilitado = true) : this.getClientes()
 
     eventbus.$on('editLancamentos', lancamento => {
       switch (lancamento.tipo_fluxo) {
