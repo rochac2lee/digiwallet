@@ -176,7 +176,7 @@ export default {
   },
   methods: {
     salvar() {
-      // if (this.$refs.form.validate() === true) {
+      if (this.$refs.form.validate() === true) {
         this.$http.put(
           'clientes',
           this.cliente.id,
@@ -197,7 +197,7 @@ export default {
             console.error(err)
           },
         )
-      // }
+      }
     },
     excluir() {
       this.$http.delete(
