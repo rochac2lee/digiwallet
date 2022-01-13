@@ -32,12 +32,19 @@ export default {
     editar(cliente) {
       eventbus.editClientes(cliente)
     },
+    tipoCliente(tipo) {
+      tipo == "PF" ? tipo = "Pessoa Física" : tipo = "Pessoa Jurídica"
+      return tipo
+    },
     getClientes() {
       this.$http.get(
         'clientes',
         res => {
           console.log(res.data.data)
           this.clientes = res.data.data
+          this.clientes.forEach(cliente => {
+            cliente.tipo_cliente = this.tipoCliente(cliente.tipo_cliente)
+          });
           this.loading = !this.loading
         },
         err => {
