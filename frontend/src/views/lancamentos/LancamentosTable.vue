@@ -55,7 +55,7 @@
               </td>
             </span>
             <td>
-              <v-btn icon @click="verDetalhes(item.id)">
+              <v-btn icon :disabled="item.recorrencia == true ? true : false" @click="verDetalhes(item.id)">
                 <v-icon> {{ !ocultarDetalhes && detalhes == item.id ? mdiChevronUp : mdiChevronDown }} </v-icon>
               </v-btn>
             </td>
