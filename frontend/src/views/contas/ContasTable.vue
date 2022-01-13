@@ -9,6 +9,8 @@
 </template>
 
 <script>
+import { eventbus } from '@/main.js'
+
 export default {
   props: {
     update: { type: Boolean, default: false },
@@ -42,6 +44,10 @@ export default {
           this.loading = !this.loading
         },
         err => {
+          eventbus.$emit('makeSnackbar', {
+            text: 'Erro ao carregar Contas!',
+            color: 'error white--text',
+          })
           console.error(err)
           this.loading = !this.loading
           this.loading_text = 'Erro ao carregar as informações'

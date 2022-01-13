@@ -156,8 +156,18 @@ export default {
             res => {
               eventbus.$emit('updateUsuarios')
               this.$emit('closeEdit')
+              eventbus.$emit('makeSnackbar', {
+                text: 'Usuário editado com sucesso!',
+                color: 'light-green darken-1 white--text',
+              })
             },
-            err => console.error(err),
+            err => {
+              eventbus.$emit('makeSnackbar', {
+                text: 'Erro ao editar Usuário!',
+                color: 'error white--text',
+              })
+              console.error(err)
+            },
           )
       }
     },
@@ -168,8 +178,18 @@ export default {
         res => {
           eventbus.$emit('updateUsuarios')
           this.$emit('closeEdit')
+          eventbus.$emit('makeSnackbar', {
+            text: 'Usuário excluído com sucesso!',
+            color: 'light-green darken-1 white--text',
+          })
         },
-        err => console.error(err),
+        err => {
+          eventbus.$emit('makeSnackbar', {
+            text: 'Erro ao excluir Usuário!',
+            color: 'error white--text',
+          })
+          console.error(err)
+        },
       )
     },
     getClientes() {
@@ -178,7 +198,13 @@ export default {
         res => {
           this.clientes = res.data.data
         },
-        err => console.error(err),
+        err => {
+          eventbus.$emit('makeSnackbar', {
+            text: 'Erro ao carregar Clientes!',
+            color: 'error white--text',
+          })
+          console.error(err)
+        },
       )
     },
   },

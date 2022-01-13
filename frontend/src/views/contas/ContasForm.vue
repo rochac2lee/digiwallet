@@ -46,7 +46,10 @@
 </template>
 
 <script>
+
 import Money from '@/components/Money.vue'
+
+import { eventbus } from '@/main.js'
 
 export default {
   components: {
@@ -72,8 +75,18 @@ export default {
             console.log(res.data.data)
             this.$emit('close')
             this.$emit('update')
+            eventbus.$emit('makeSnackbar', {
+              text: 'Conta cadastrada com sucesso!',
+              color: 'light-green darken-1 white--text',
+            })
           },
-          err => console.error(err),
+          err => {
+            eventbus.$emit('makeSnackbar', {
+              text: 'Erro ao editar Cliente!',
+              color: 'error white--text',
+            })
+            console.error(err)
+          },
         )
       },
     },

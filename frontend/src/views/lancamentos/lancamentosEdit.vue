@@ -229,8 +229,18 @@ export default {
           res => {
             eventbus.$emit('updateLancamentos')
             this.$emit('closeEditLancamentos')
+            eventbus.$emit('makeSnackbar', {
+              text: 'Lançamento editado com sucesso!',
+              color: 'light-green darken-1 white--text',
+            })
           },
-          err => console.error(err),
+          err => {
+            eventbus.$emit('makeSnackbar', {
+              text: 'Erro ao editar Lançamento!',
+              color: 'error white--text',
+            })
+            console.error(err)
+          },
         )
       }
     },
@@ -243,8 +253,18 @@ export default {
 
           eventbus.$emit('updateLancamentos')
           this.$emit('closeEditLancamentos')
+          eventbus.$emit('makeSnackbar', {
+            text: 'Lançamento excluído com sucesso!',
+            color: 'light-green darken-1 white--text',
+          })
         },
-        err => console.error(err),
+        err => {
+          eventbus.$emit('makeSnackbar', {
+            text: 'Erro ao excluir Lançamento!',
+            color: 'error white--text',
+          })
+          console.error(err)
+        },
       )
     },
     getContas() {
@@ -253,7 +273,13 @@ export default {
         res => {
           this.contas = res.data.data
         },
-        err => console.error(err),
+        err => {
+          eventbus.$emit('makeSnackbar', {
+            text: 'Erro ao carregar Contas!',
+            color: 'error white--text',
+          })
+          console.error(err)
+        },
       )
     },
     getClientes() {
@@ -262,7 +288,13 @@ export default {
         res => {
           this.clientes = res.data.data
         },
-        err => console.error(err),
+        err => {
+          eventbus.$emit('makeSnackbar', {
+            text: 'Erro ao carregar Cliente!',
+            color: 'error white--text',
+          })
+          console.error(err)
+        },
       )
     },
     getCategorias(id) {
@@ -271,7 +303,13 @@ export default {
         res => {
           this.categorias = res.data.data
         },
-        err => console.error(err),
+        err => {
+          eventbus.$emit('makeSnackbar', {
+            text: 'Erro ao carregar Categorias!',
+            color: 'error white--text',
+          })
+          console.error(err)
+        },
       )
     },
     formatDate(date) {

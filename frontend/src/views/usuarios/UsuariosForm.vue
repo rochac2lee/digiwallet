@@ -157,8 +157,18 @@ export default {
             res => {
               eventbus.$emit('updateUsuarios')
               this.$emit('closeForm')
+              eventbus.$emit('makeSnackbar', {
+                text: 'Usuário cadastrado com sucesso!',
+                color: 'light-green darken-1 white--text',
+              })
             },
-            err => console.error(err),
+            err => {
+              eventbus.$emit('makeSnackbar', {
+                text: 'Erro ao cadastrar Usuário!',
+                color: 'error white--text',
+              })
+              console.error(err)
+            },
           )
       }
     },
@@ -168,7 +178,13 @@ export default {
         res => {
           this.clientes = res.data.data
         },
-        err => console.error(err),
+        err => {
+          eventbus.$emit('makeSnackbar', {
+            text: 'Erro ao carregar Clientes!',
+            color: 'error white--text',
+          })
+          console.error(err)
+        },
       )
     },
   },

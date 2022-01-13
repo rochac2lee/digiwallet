@@ -132,8 +132,18 @@ export default {
         recorrencia.id,
         res => {
           console.log(res.data.data)
+          eventbus.$emit('makeSnackbar', {
+            text: 'Lançamento recorrente marcado como Pago!',
+            color: 'light-green darken-1 white--text',
+          })
         },
-        err => console.error(err),
+        err => {
+          eventbus.$emit('makeSnackbar', {
+            text: 'Erro ao marcar Lançamento recorrente como Pago!',
+            color: 'error white--text',
+          })
+          console.error(err)
+        },
       )
     },
     getFluxos() {
@@ -143,7 +153,13 @@ export default {
           console.log(res.data.data)
           this.fluxos = res.data.data
         },
-        err => console.error(err),
+        err => {
+          eventbus.$emit('makeSnackbar', {
+            text: 'Erro ao carregar Lançamentos!',
+            color: 'error white--text',
+          })
+          console.error(err)
+        },
       )
     },
   },

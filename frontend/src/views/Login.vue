@@ -1,5 +1,7 @@
 <template>
   <div class="auth-wrapper auth-v1">
+    <Snackbar :snackbar="snackbar" @openSnackbar="openSnackbar" @closeSnackbar="snackbar = false"></Snackbar>
+
     <div class="auth-inner">
       <v-card class="auth-card">
         <!-- logo -->
@@ -69,8 +71,14 @@
 // eslint-disable-next-line object-curlfalsey-newline
 import { mdiFacebook, mdiTwitter, mdiGithub, mdiGoogle, mdiEyeOutline, mdiEyeOffOutline } from '@mdi/js'
 import { ref } from '@vue/composition-api'
+import { eventbus } from '@/main.js'
+
+import Snackbar from '@/layouts/components/Snackbar.vue'
 
 export default {
+  components: {
+    Snackbar,
+  },
   data() {
     const email = ref('')
     const password = ref('')
@@ -83,6 +91,9 @@ export default {
       // },
       usuario: {},
 
+      snackConfigs: {},
+      snackbar: false,
+
       icons: {
         mdiEyeOutline,
         mdiEyeOffOutline,
@@ -91,22 +102,34 @@ export default {
   },
   methods: {
     efetuarLogin() {
-      this.showSnackbar = true,
+      ;(this.showSnackbar = true),
         this.$store
           .dispatch('efetuarLogin', this.usuario)
           .then(() => {
             this.$session.start()
             this.$session.set('jwt', this.$store.state.token)
             // this.$session.set("expire_time", this.$store.state.usuario.expire_time);
-            console.log("sucesso");
-            this.$router.push({ name: 'dashboard' })
+            eventbus.$emit('makeSnackbar', {
+              text: 'Seja Bem Vindo!',
+              color: 'light-green darken-1 white--text',
+            })
+            setTimeout(() => {
+              this.$router.push({ name: 'dashboard' })
+            }, 2100)
           })
-          .catch(() => {
+          .catch(err => {
+            eventbus.$emit('makeSnackbar', {
+              text: 'Usuário ou Senha Inválidos!',
+              color: 'error white--text',
+            })
             this.usuario = {
               usuario: '',
               senha: '',
             }
           })
+    },
+    openSnackbar() {
+      this.snackbar = true
     },
   },
   mounted() {

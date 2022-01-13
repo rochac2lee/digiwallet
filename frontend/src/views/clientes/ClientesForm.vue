@@ -176,26 +176,51 @@ export default {
           this.cliente,
           res => {
             eventbus.$emit('updateClientes')
+            eventbus.$emit('makeSnackbar', {
+              text: 'Cliente cadastrado com sucesso!',
+              color: 'light-green darken-1 white--text',
+            })
             this.$emit('closeForm')
           },
-          err => console.error(err),
+          err => {
+            eventbus.$emit('makeSnackbar', {
+              text: 'Erro ao cadastrar Cliente!',
+              color: 'error white--text',
+            })
+            console.error(err)
+          },
         )
       }
     },
     getEndereco() {
-      axios.get(`https://viacep.com.br/ws/${this.cliente.cep}/json/unicode/`).then(res => {
-        console.log(res.data)
+      axios
+        .get(`https://viacep.com.br/ws/${this.cliente.cep}/json/unicode/`)
+        .then(res => {
 
-        this.cliente.logradouro = null
-        this.cliente.bairro = null
-        this.cliente.estado_uf = null
-        this.cliente.cidade = null
+          this.cliente.logradouro = null
+          this.cliente.bairro = null
+          this.cliente.estado_uf = null
+          this.cliente.cidade = null
 
-        this.cliente.logradouro = res.data.logradouro
-        this.cliente.bairro = res.data.bairro
-        this.cliente.estado_uf = res.data.uf
-        this.cliente.cidade = res.data.localidade
-      })
+          this.cliente.logradouro = res.data.logradouro
+          this.cliente.bairro = res.data.bairro
+          this.cliente.estado_uf = res.data.uf
+          this.cliente.cidade = res.data.localidade
+
+          if (res.data.erro == true) {
+            eventbus.$emit('makeSnackbar', {
+            text: 'Endereço não encontrado!',
+            color: 'warning white--text',
+          })
+          } 
+        })
+        .catch(err => {
+          eventbus.$emit('makeSnackbar', {
+            text: 'Erro ao carregar endereço automaticamente!',
+            color: 'error white--text',
+          })
+          console.error(err)
+        })
     },
   },
 }

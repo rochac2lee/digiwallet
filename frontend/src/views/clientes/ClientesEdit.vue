@@ -205,9 +205,19 @@ export default {
         this.cliente.id,
         res => {
           eventbus.$emit('updateClientes')
+          eventbus.$emit('makeSnackbar', {
+            text: 'Cliente excluído com sucesso!',
+            color: 'light-green darken-1 white--text',
+          })
           this.$emit('closeEdit')
         },
-        err => console.error(err),
+        err => {
+          eventbus.$emit('makeSnackbar', {
+            text: 'Erro ao excluir Cliente!',
+            color: 'error white--text',
+          })
+          console.error(err)
+        },
       )
     },
     getEndereco() {
@@ -228,6 +238,14 @@ export default {
   },
   mounted() {
     eventbus.$on('editClientes', cliente => {
+      switch (cliente.tipo_cliente) {
+        case "Pessoa Física":
+          cliente.tipo_cliente = "PF"
+          break;
+        case "Pessoa Jurídica":
+          cliente.tipo_cliente = "PJ"
+          break;
+      }
       this.cliente = cliente
       this.$emit('openEdit')
     })

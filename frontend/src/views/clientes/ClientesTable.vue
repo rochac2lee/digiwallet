@@ -1,11 +1,12 @@
 <template>
-  <v-data-table 
-    :headers="headers" 
+  <v-data-table
+    :headers="headers"
     :items="clientes"
-    :loading="loading" 
-    :loading-text="loading_text" 
+    :loading="loading"
+    :loading-text="loading_text"
     :footer-props="footer_prop"
-    @click:row="handleClick"></v-data-table>
+    @click:row="handleClick"
+  ></v-data-table>
 </template>
 
 <script>
@@ -50,6 +51,10 @@ export default {
           this.loading = false
         },
         err => {
+          eventbus.$emit('makeSnackbar', {
+            text: 'Erro ao carregar Clientes!',
+            color: 'error white--text',
+          })
           console.error(err)
           this.loading = false
           this.loading_text = 'Erro ao carregar as informações'
