@@ -125,15 +125,15 @@
           </v-container>
         </v-card-text>
         <v-card-actions>
-            <v-row justify="space-between">
-              <v-col>
-                <v-btn color="error darken-1" text @click="excluir(), $emit('closeEdit')"> Excluir </v-btn>
-              </v-col>
-              <v-col align="end">
-                <v-btn color="grey darken-1" text @click="$emit('closeEdit')"> Cancelar </v-btn>
-                <v-btn color="primary" text @click="salvar()"> Salvar </v-btn>
-              </v-col>
-            </v-row>
+          <v-row justify="space-between">
+            <v-col>
+              <v-btn color="error darken-1" text @click="excluir(), $emit('closeEdit')"> Excluir </v-btn>
+            </v-col>
+            <v-col align="end">
+              <v-btn color="grey darken-1" text @click="$emit('closeEdit')"> Cancelar </v-btn>
+              <v-btn color="primary" text @click="salvar()"> Salvar </v-btn>
+            </v-col>
+          </v-row>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -163,7 +163,7 @@ export default {
       cliente: {
         cep: null,
         cpf_cnpj: null,
-        logradouro: "",
+        logradouro: '',
       },
       value: null,
       focus: false,
@@ -176,18 +176,28 @@ export default {
   },
   methods: {
     salvar() {
-      if (this.$refs.form.validate() === true) {
+      // if (this.$refs.form.validate() === true) {
         this.$http.put(
           'clientes',
           this.cliente.id,
           this.cliente,
           res => {
             eventbus.$emit('updateClientes')
+            eventbus.$emit('makeSnackbar', {
+              text: 'Cliente editado com sucesso!',
+              color: 'light-green darken-1 white--text',
+            })
             this.$emit('closeEdit')
           },
-          err => console.error(err),
+          err => {
+            eventbus.$emit('makeSnackbar', {
+              text: 'Erro ao editar Cliente!',
+              color: 'error white--text',
+            })
+            console.error(err)
+          },
         )
-      }
+      // }
     },
     excluir() {
       this.$http.delete(
@@ -217,10 +227,10 @@ export default {
     },
   },
   mounted() {
-      eventbus.$on('editClientes', cliente => {
+    eventbus.$on('editClientes', cliente => {
       this.cliente = cliente
       this.$emit('openEdit')
     })
-  }
+  },
 }
 </script>

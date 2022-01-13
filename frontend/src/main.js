@@ -28,6 +28,10 @@ export const eventbus = new Vue({
       this.$emit('updateRecorrencias')
     },
 
+    makeSnackbar(configs) {
+      this.$emit('makeSnackbar', configs)
+    },
+
     editLancamentos(lancamento) {
       this.$emit('editLancamentos', lancamento)
     },

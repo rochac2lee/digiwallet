@@ -4,6 +4,7 @@
     <v-col cols="12">
       <v-card>
         <v-card-title>Clientes</v-card-title>
+        <Snackbar :snackbar="snackbar" @openSnackbar="openSnackbar" @closeSnackbar="snackbar = false"></Snackbar>
         <ClientesTable></ClientesTable>
         <ClientesForm :dialog="dialog" @closeForm="dialog = false"></ClientesForm>
         <ClientesEdit :dialogEdit="dialogEdit"  @openEdit="openEdit" @closeEdit="dialogEdit = false"></ClientesEdit>
@@ -35,6 +36,7 @@
 </template>
 
 <script>
+import Snackbar from '@/layouts/components/Snackbar.vue'
 import ClientesTable from './ClientesTable.vue'
 import ClientesForm from './ClientesForm.vue'
 import ClientesEdit from './ClientesEdit.vue'
@@ -43,6 +45,7 @@ import { mdiPlus } from '@mdi/js'
 
 export default {
   components: {
+    Snackbar,
     ClientesTable,
     ClientesForm,
     ClientesEdit
@@ -62,6 +65,9 @@ export default {
       transition: 'slide-y-reverse-transition',
       mdiPlus,
 
+      snackConfigs: {},
+      snackbar: false,
+
       dialog: false,
       dialogEdit: false,
     }
@@ -69,7 +75,10 @@ export default {
   methods: {
     openEdit() {
       this.dialogEdit = true
+    },
+    openSnackbar() {
+      this.snackbar = true
     }
-  }
+  },
 }
 </script>

@@ -4,9 +4,8 @@
     :items="clientes"
     :loading="loading" 
     :loading-text="loading_text" 
-    :footer-props="footer_prop"></v-data-table>
-
-  </v-simple-table>
+    :footer-props="footer_prop"
+    @click:row="handleClick"></v-data-table>
 </template>
 
 <script>
@@ -23,33 +22,36 @@ export default {
       loading: true,
       loading_text: 'Carregando...',
       footer_prop: {
-        'items-per-page-text':'Itens por página'
+        'items-per-page-text': 'Itens por página',
       },
       clientes: [],
     }
   },
   methods: {
+    handleClick(value) {
+      this.editar(value)
+    },
     editar(cliente) {
+      console.log(cliente)
       eventbus.editClientes(cliente)
     },
     tipoCliente(tipo) {
-      tipo == "PF" ? tipo = "Pessoa Física" : tipo = "Pessoa Jurídica"
+      tipo == 'PF' ? (tipo = 'Pessoa Física') : (tipo = 'Pessoa Jurídica')
       return tipo
     },
     getClientes() {
       this.$http.get(
         'clientes',
         res => {
-          console.log(res.data.data)
           this.clientes = res.data.data
           this.clientes.forEach(cliente => {
             cliente.tipo_cliente = this.tipoCliente(cliente.tipo_cliente)
-          });
-          this.loading = !this.loading
+          })
+          this.loading = false
         },
         err => {
           console.error(err)
-          this.loading = !this.loading
+          this.loading = false
           this.loading_text = 'Erro ao carregar as informações'
         },
       )
@@ -59,7 +61,6 @@ export default {
     this.getClientes()
     eventbus.$on('updateClientes', () => {
       this.getClientes()
-      console.log('evento disparado')
     })
   },
 }
