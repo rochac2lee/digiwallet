@@ -29,7 +29,7 @@
 
     <!-- Navigation Items -->
     <v-list expand rounded class="vertical-nav-menu-items">
-      <nav-menu-link title="Dashboard" :to="{ name: 'dashboard' }" :icon="icons.mdiHomeOutline"></nav-menu-link>
+      <nav-menu-link title="Dashboard" :to="{ name: 'dashboard' }" color="white" :icon="icons.mdiHomeOutline"></nav-menu-link>
       <nav-menu-section-title title="Espaço do Administrador"></nav-menu-section-title>
       <nav-menu-link
         v-if="clientesHabilitado == false"
