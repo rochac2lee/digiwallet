@@ -6,11 +6,16 @@ Para esse projeto utilizamos o Laravel como framework backend e utilizamos o ban
 
 ## Instalação
 
-1 - Acesse o mysql e crie o banco de dados com o comando abaixo:
+
+1 - Instale os pacotes necessários:
+```
+composer install
+```
+2 - Acesse o mysql e crie o banco de dados com o comando abaixo:
 ```
 CREATE DATABASE digiwallet;
 ```
-2 - Crie uma cópia do arquivo .env.example para .env e altere os dados de conexões:
+3 - Crie uma cópia do arquivo .env.example para .env e altere os dados de conexões:
 
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
