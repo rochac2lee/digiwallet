@@ -72,6 +72,8 @@
 <script>
 import { mdiPlus, mdiMinus } from '@mdi/js'
 
+import { eventbus } from '@/main.js'
+
 export default {
   data() {
     return {
@@ -89,7 +91,13 @@ export default {
           this.entradas = res.data.entradas
           this.saidas = res.data.saidas
         },
-        err => console.error(err),
+        err => {
+          eventbus.$emit('makeSnackbar', {
+            text: 'Erro ao carregar Entradas e Saídas!',
+            color: 'error white--text',
+          })
+          console.error(err)
+        },
       )
     },
   },

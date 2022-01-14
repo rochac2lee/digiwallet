@@ -11,7 +11,13 @@
     </v-card-title>
     <v-card-text>
       <v-row>
-        <v-col v-for="data in indicadoresGerais" :key="data.title" cols="6" :md="indicadoresGerais.length == 4 ? 3 : 4" class="d-flex align-center">
+        <v-col
+          v-for="data in indicadoresGerais"
+          :key="data.title"
+          cols="6"
+          :md="indicadoresGerais.length == 4 ? 3 : 4"
+          class="d-flex align-center"
+        >
           <v-avatar size="44" :color="resolveStatisticsIconVariation(data.title).color" rounded class="elevation-1">
             <v-icon dark color="white" size="30">
               {{ resolveStatisticsIconVariation(data.title).icon }}
@@ -43,6 +49,8 @@ import {
   mdiDotsVertical,
   mdiLabelOutline,
 } from '@mdi/js'
+
+import { eventbus } from '@/main.js'
 
 export default {
   data() {
@@ -78,7 +86,13 @@ export default {
         res => {
           this.indicadoresGerais = res.data.indicadoresGerais
         },
-        err => console.error(err),
+        err => {
+          eventbus.$emit('makeSnackbar', {
+            text: 'Erro ao carregar Indicadores!',
+            color: 'error white--text',
+          })
+          console.error(err)
+        },
       )
     },
   },

@@ -1,5 +1,7 @@
 <template>
   <div class="auth-wrapper auth-v1">
+    <Snackbar :snackbar="snackbar" @openSnackbar="openSnackbar" @closeSnackbar="snackbar = false"></Snackbar>
+
     <div class="auth-inner">
       <v-card class="auth-card">
         <!-- logo -->
@@ -25,6 +27,7 @@
               v-model="usuario.usuario"
               outlined
               label="Email"
+              name="email"
               placeholder="john@example.com"
               hide-details
               class="mb-3"
@@ -35,13 +38,15 @@
               outlined
               :type="isPasswordVisible ? 'text' : 'password'"
               label="Senha"
+              name="password"
               placeholder="············"
               :append-icon="isPasswordVisible ? icons.mdiEyeOffOutline : icons.mdiEyeOutline"
               hide-details
               @click:append="isPasswordVisible = !isPasswordVisible"
+              @keypress.enter="efetuarLogin()"
             ></v-text-field>
 
-            <v-btn block color="primary" class="mt-6" @click="efetuarLogin()"> Login </v-btn>
+            <v-btn block color="primary" class="mt-6" :loading="loading" :disabled="loading" @click="efetuarLogin()"> Login </v-btn>
           </v-form>
         </v-card-text>
       </v-card>
@@ -63,23 +68,32 @@
 </template>
 
 <script>
-// eslint-disable-next-line object-curly-newline
+// eslint-disable-next-line object-curlfalsey-newline
 import { mdiFacebook, mdiTwitter, mdiGithub, mdiGoogle, mdiEyeOutline, mdiEyeOffOutline } from '@mdi/js'
 import { ref } from '@vue/composition-api'
+import { eventbus } from '@/main.js'
+
+import Snackbar from '@/layouts/components/Snackbar.vue'
 
 export default {
+  components: {
+    Snackbar,
+  },
   data() {
-    const isPasswordVisible = ref(false)
     const email = ref('')
     const password = ref('')
 
     return {
-      isPasswordVisible,
+      isPasswordVisible: false,
       // usuario: {
       //   usuario: 'admin@digiwallet.com',
       //   senha: 'admin',
       // },
       usuario: {},
+
+      snackConfigs: {},
+      snackbar: false,
+      loading: false,
 
       icons: {
         mdiEyeOutline,
@@ -89,22 +103,36 @@ export default {
   },
   methods: {
     efetuarLogin() {
-      this.showSnackbar = true,
+      this.showSnackbar = true
+      this.loading = true      
         this.$store
           .dispatch('efetuarLogin', this.usuario)
           .then(() => {
             this.$session.start()
             this.$session.set('jwt', this.$store.state.token)
-            // this.$session.set("expire_time", this.$store.state.usuario.expire_time);
-            console.log("sucesso");
-            this.$router.push({ name: 'dashboard' })
+            this.$session.set("expire_time", this.$store.state.usuario.expire_time);
+            eventbus.$emit('makeSnackbar', {
+              text: 'Seja Bem Vindo!',
+              color: 'light-green darken-1 white--text',
+            })
+            setTimeout(() => {
+              this.$router.push({ name: 'dashboard' })
+            }, 2100)
           })
-          .catch(() => {
+          .catch(err => {
+            eventbus.$emit('makeSnackbar', {
+              text: 'Usuário ou Senha Inválidos!',
+              color: 'error white--text',
+            })
+            this.loading = false
             this.usuario = {
               usuario: '',
               senha: '',
             }
           })
+    },
+    openSnackbar() {
+      this.snackbar = true
     },
   },
   mounted() {

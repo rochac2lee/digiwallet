@@ -1,50 +1,68 @@
 <template>
-  <v-simple-table>
-    <template v-slot:default>
-      <thead>
-        <tr>
-          <th class="text-uppercase">Nome</th>
-          <th class="text-center text-uppercase">Tipo</th>
-          <th class="text-center text-uppercase">CPF/CNPJ</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="item in clientes" :key="item.clientes" class="pointer" @click="editar(item)">
-          <td>{{ item.nome }}</td>
-          <td class="text-center">
-            {{ item.tipo_cliente }}
-          </td>
-          <td class="text-center">
-            {{ item.cpf_cnpj }}
-          </td>
-        </tr>
-      </tbody>
-    </template>
-  </v-simple-table>
+  <v-data-table
+    :headers="headers"
+    :items="clientes"
+    :search="termo"
+    :loading="loading"
+    :loading-text="loading_text"
+    :footer-props="footer_prop"
+    @click:row="handleClick"
+  ></v-data-table>
 </template>
 
 <script>
-
 import { eventbus } from '@/main.js'
 
 export default {
+  props: {
+    termo: { type: String, default: '' },
+  },
   data() {
     return {
-      clientes: {},
+      headers: [
+        { text: 'Nome', value: 'nome' },
+        { text: 'Tipo', value: 'tipo_cliente' },
+        { text: 'CPF/CNPJ', value: 'cpf_cnpj' },
+      ],
+      loading: true,
+      loading_text: 'Carregando...',
+      footer_prop: {
+        'items-per-page-text': 'Itens por página',
+      },
+      clientes: [],
     }
   },
   methods: {
+    handleClick(value) {
+      this.editar(value)
+    },
     editar(cliente) {
+      console.log(cliente)
       eventbus.editClientes(cliente)
+    },
+    tipoCliente(tipo) {
+      tipo == 'PF' ? (tipo = 'Pessoa Física') : (tipo = 'Pessoa Jurídica')
+      return tipo
     },
     getClientes() {
       this.$http.get(
         'clientes',
         res => {
-          console.log(res.data.data)
           this.clientes = res.data.data
+          this.clientes.forEach(cliente => {
+            cliente.tipo_cliente = this.tipoCliente(cliente.tipo_cliente)
+          })
+          this.loading = false
         },
-        err => console.error(err),
+        err => {
+          eventbus.$emit('makeSnackbar', {
+            text: 'Erro ao carregar Clientes!',
+            color: 'error white--text',
+          })
+          console.error(err)
+          this.loading = false
+          this.loading_text = 'Erro ao carregar as informações'
+        },
       )
     },
   },
@@ -52,7 +70,6 @@ export default {
     this.getClientes()
     eventbus.$on('updateClientes', () => {
       this.getClientes()
-      console.log('evento disparado')
     })
   },
 }

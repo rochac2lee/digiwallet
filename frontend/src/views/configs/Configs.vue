@@ -22,6 +22,9 @@
 </template>
 
 <script>
+
+import { eventbus } from '@/main.js'
+
 export default {
   components: {},
   data() {
@@ -37,8 +40,14 @@ export default {
         'configs',
         res => {
           this.configs = res.data.data[0]
+
+          this.$cookies.set('habilitar_clientes', this.configs.habilitar_clientes)
         },
         err => {
+          eventbus.$emit('makeSnackbar', {
+            text: 'Erro ao carregar Configurações!',
+            color: 'error white--text',
+          })
           console.error(err)
         },
       )
@@ -49,10 +58,20 @@ export default {
         this.configs.id,
         this.configs,
         res => {
+          eventbus.$emit('makeSnackbar', {
+            text: 'Configurações salvas com sucesso!',
+            color: 'light-green darken-1 white--text',
+          })
           this.configs = res.data.data
-          this.$router.go();
+          console.log(this.configs.habilitar_clientes)
+          this.$cookies.set('habilitar_clientes', this.configs.habilitar_clientes)
+          this.$router.go()
         },
         err => {
+          eventbus.$emit('makeSnackbar', {
+            text: 'Erro ao salvar Configurações!',
+            color: 'error white--text',
+          })
           console.error(err)
         },
       )

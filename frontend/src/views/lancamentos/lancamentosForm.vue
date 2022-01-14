@@ -215,9 +215,19 @@ export default {
           this.lancamento,
           res => {
             eventbus.$emit('updateLancamentos')
+            eventbus.$emit('makeSnackbar', {
+              text: 'Lançamento cadastrado com sucesso!',
+              color: 'light-green darken-1 white--text',
+            })
             this.$emit('closeFormLancamentos')
           },
-          err => console.error(err),
+          err => {
+            eventbus.$emit('makeSnackbar', {
+              text: 'Erro ao cadastrar Lançamento!',
+              color: 'error white--text',
+            })
+            console.error(err)
+          },
         )
       }
     },
@@ -227,7 +237,13 @@ export default {
         res => {
           this.contas = res.data.data
         },
-        err => console.error(err),
+        err => {
+          eventbus.$emit('makeSnackbar', {
+            text: 'Erro ao carregar Contas!',
+            color: 'error white--text',
+          })
+          console.error(err)
+        },
       )
     },
     getClientes() {
@@ -236,7 +252,13 @@ export default {
         res => {
           this.clientes = res.data.data
         },
-        err => console.error(err),
+        err => {
+          eventbus.$emit('makeSnackbar', {
+            text: 'Erro ao carregar Clientes!',
+            color: 'error white--text',
+          })
+          console.error(err)
+        },
       )
     },
     getCategorias() {
@@ -255,7 +277,13 @@ export default {
         res => {
           this.categorias = res.data.data
         },
-        err => console.error(err),
+        err => {
+          eventbus.$emit('makeSnackbar', {
+            text: 'Erro ao carregar Categorias!',
+            color: 'error white--text',
+          })
+          console.error(err)
+        },
       )
     },
     formatDate(date) {
@@ -291,14 +319,7 @@ export default {
   },
   mounted() {
     this.getContas()
-
-    this.$settings.global_configs.forEach(config => {
-      if (config.habilitar_clientes == false) {
-        this.clientesHabilitado = true
-      } else {
-        this.getClientes()
-      }
-    })
+    this.$cookies.get('habilitar_clientes') == false ? (this.clientesHabilitado = true) : this.getClientes()
   },
 }
 </script>

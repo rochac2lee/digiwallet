@@ -1,30 +1,33 @@
 <template>
-  <v-simple-table>
-    <template v-slot:default>
-      <thead>
-        <tr>
-          <th class="text-uppercase">Nome</th>
-          <th class="text-uppercase">Saldo</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="item in contas" :key="item.contas">
-          <td>{{ item.nome }}</td>
-          <td>R$ {{ item.saldo }}</td>
-        </tr>
-      </tbody>
-    </template>
-  </v-simple-table>
+  <v-data-table
+    :headers="headers"
+    :items="contas"
+    :search="termo"
+    :loading="loading"
+    :loading-text="loading_text"
+    :footer-props="footer_prop"
+  ></v-data-table>
 </template>
 
 <script>
+import { eventbus } from '@/main.js'
+
 export default {
   props: {
-    update: { type: Boolean, default: false },
+    termo: { type: String, default: '' },
   },
   data() {
     return {
-      contas: {}
+      headers: [
+        { text: 'Nome', value: 'nome' },
+        { text: 'Saldo', value: 'saldo' },
+      ],
+      loading: true,
+      loading_text: 'Carregando...',
+      footer_prop: {
+        'items-per-page-text': 'Itens por página',
+      },
+      contas: [],
     }
   },
   methods: {
@@ -34,8 +37,22 @@ export default {
         res => {
           console.log(res.data.data)
           this.contas = res.data.data
+
+          this.contas.forEach(conta => {
+            conta.saldo = 'R$ ' + conta.saldo
+          })
+
+          this.loading = !this.loading
         },
-        err => console.error(err),
+        err => {
+          eventbus.$emit('makeSnackbar', {
+            text: 'Erro ao carregar Contas!',
+            color: 'error white--text',
+          })
+          console.error(err)
+          this.loading = !this.loading
+          this.loading_text = 'Erro ao carregar as informações'
+        },
       )
     },
   },

@@ -35,21 +35,16 @@
 import { mdiPoll, mdiLabelVariantOutline, mdiCurrencyUsd, mdiHelpCircleOutline } from '@mdi/js'
 import StatisticsCardVertical from '@/components/statistics-card/StatisticsCardVertical.vue'
 
-// demos
-import DashboardCongratulationJohn from './DashboardCongratulationJohn.vue'
 import DashboardStatisticsCard from './DashboardStatisticsCard.vue'
 import DashboardCardEntradasESaidas from './DashboardCardEntradasESaidas.vue'
 import DashboardWeeklyOverview from './DashboardWeeklyOverview.vue'
-import DashboardDatatable from './DashboardDatatable.vue'
 
 export default {
   components: {
     StatisticsCardVertical,
-    DashboardCongratulationJohn,
     DashboardStatisticsCard,
     DashboardCardEntradasESaidas,
     DashboardWeeklyOverview,
-    DashboardDatatable,
   },
   setup() {
     const totalProfit = {

@@ -29,6 +29,8 @@ import VueApexCharts from 'vue-apexcharts'
 import { mdiDotsVertical, mdiTrendingUp, mdiCurrencyUsd } from '@mdi/js'
 import { getCurrentInstance } from '@vue/composition-api'
 
+import { eventbus } from '@/main.js'
+
 export default {
   components: {
     VueApexCharts,
@@ -128,7 +130,13 @@ export default {
           this.series[0].data = data
           this.percentualLucroLiquido = parseInt(percentual)
         },
-        err => console.error(err),
+        err => {
+          eventbus.$emit('makeSnackbar', {
+            text: 'Erro ao carregar Gráfico!',
+            color: 'error white--text',
+          })
+          console.error(err)
+        },
       )
     },
     getLastMonths() {
@@ -145,7 +153,7 @@ export default {
         d = new Date(today.getFullYear(), today.getMonth() - i, 1)
         month = monthNames[d.getMonth()]
         year = d.getFullYear().toString().substr(-2)
-        console.log(month + '/' + year);
+        console.log(month + '/' + year)
         periodo[i] = month + '/' + year
       }
 

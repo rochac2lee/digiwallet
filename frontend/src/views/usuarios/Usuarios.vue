@@ -3,8 +3,18 @@
     <!-- basic -->
     <v-col cols="12">
       <v-card>
-        <v-card-title>Usuários</v-card-title>
-        <UsuariosTable></UsuariosTable>
+        <v-col cols="4">
+          <v-text-field
+            rounded
+            dense
+            outlined
+            v-model="termo"
+            :prepend-inner-icon="mdiMagnify"
+            class="app-bar-search flex-grow-0"
+            hide-details
+          ></v-text-field>
+        </v-col>
+        <UsuariosTable :termo="termo"></UsuariosTable>
 
         <UsuariosForm :dialog="dialog" @closeForm="dialog = false"></UsuariosForm>
 
@@ -14,6 +24,7 @@
     <v-speed-dial
       v-model="fab"
       :top="top"
+      :fixed="fixed"
       :bottom="bottom"
       :right="right"
       :left="left"
@@ -40,7 +51,7 @@ import UsuariosTable from './UsuariosTable.vue'
 import UsuariosForm from './UsuariosForm.vue'
 import UsuariosEdit from './UsuariosEdit.vue'
 
-import { mdiPlus } from '@mdi/js'
+import { mdiPlus, mdiMagnify } from '@mdi/js'
 
 export default {
   components: {
@@ -51,8 +62,9 @@ export default {
   setup() {
     return {
       direction: 'top',
-      fab: false,
+      fab: true,
       fling: false,
+      fixed: true,
       hover: false,
       tabs: null,
       top: false,
@@ -61,6 +73,9 @@ export default {
       left: false,
       transition: 'slide-y-reverse-transition',
       mdiPlus,
+      mdiMagnify,
+
+      termo: "",
 
       dialog: false,
       dialogEdit: false,
@@ -73,12 +88,3 @@ export default {
   },
 }
 </script>
-<style scoped>
-.v-speed-dial {
-  position: absolute;
-}
-
-.v-btn--floating {
-  position: relative;
-}
-</style>

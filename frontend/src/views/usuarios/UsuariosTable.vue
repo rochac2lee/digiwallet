@@ -1,35 +1,34 @@
 <template>
-  <v-simple-table>
-    <template v-slot:default>
-      <thead>
-        <tr>
-          <th class="text-center text-uppercase">Perfil</th>
-          <th class="text-center text-uppercase">Nome</th>
-          <th class="text-center text-uppercase">Email</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="item in usuarios" :key="item.id" class="pointer" @click="editar(item)">
-          <td class="text-center">
-            {{ item.perfil }}
-          </td>
-          <td class="text-center">{{ item.nome }}</td>
-          <td class="text-center">
-            {{ item.usuario }}
-          </td>
-        </tr>
-      </tbody>
-    </template>
-  </v-simple-table>
+  <v-data-table
+    :headers="headers"
+    :items="usuarios"
+    :search="termo"
+    :loading="loading"
+    :loading-text="loading_text"
+    :footer-props="footer_prop"
+  ></v-data-table>
 </template>
 
 <script>
 import { eventbus } from '@/main.js'
 
 export default {
+  props: {
+    termo: { type: String, default: '' },
+  },
   data() {
     return {
-      usuarios: {},
+      headers: [
+        { text: 'Perfil', value: 'perfil' },
+        { text: 'Nome', value: 'nome' },
+        { text: 'Email', value: 'usuario' },
+      ],
+      loading: true,
+      loading_text: 'Carregando...',
+      footer_prop: {
+        'items-per-page-text': 'Itens por página',
+      },
+      usuarios: [],
     }
   },
   methods: {
@@ -38,8 +37,17 @@ export default {
         'usuarios',
         res => {
           this.usuarios = res.data.data
+          this.loading = !this.loading
         },
-        err => console.error(err),
+        err => {
+          eventbus.$emit('makeSnackbar', {
+            text: 'Erro ao carregar Usuários!',
+            color: 'error white--text',
+          })
+          console.error(err)
+          this.loading = !this.loading
+          this.loading_text = 'Erro ao carregar as informações'
+        },
       )
     },
     editar(usuario) {

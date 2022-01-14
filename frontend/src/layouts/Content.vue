@@ -2,37 +2,20 @@
   <v-app>
     <vertical-nav-menu :is-drawer-open.sync="isDrawerOpen"></vertical-nav-menu>
 
-    <v-app-bar
-      app
-      flat
-      absolute
-      color="transparent"
-    >
+    <Snackbar :snackbar="snackbar" @openSnackbar="openSnackbar" @closeSnackbar="snackbar = false"></Snackbar>
+
+    <v-app-bar app flat absolute color="transparent">
       <div class="boxed-container w-full">
         <div class="d-flex align-center mx-6">
           <!-- Left Content -->
-          <v-app-bar-nav-icon
-            class="d-block d-lg-none me-2"
-            @click="isDrawerOpen = !isDrawerOpen"
-          ></v-app-bar-nav-icon>
-          <v-text-field
-            rounded
-            dense
-            outlined
-            :prepend-inner-icon="icons.mdiMagnify"
-            class="app-bar-search flex-grow-0"
-            hide-details
-          ></v-text-field>
+          <v-app-bar-nav-icon class="d-block d-lg-none me-2" @click="isDrawerOpen = !isDrawerOpen"></v-app-bar-nav-icon>
+          <h2>{{ this.$route.meta.titulo }}</h2>
 
           <v-spacer></v-spacer>
 
           <!-- Right Content -->
           <theme-switcher></theme-switcher>
-          <v-btn
-            icon
-            small
-            class="ms-3"
-          >
+          <v-btn icon small class="ms-3">
             <v-icon>
               {{ icons.mdiBellOutline }}
             </v-icon>
@@ -48,16 +31,8 @@
       </div>
     </v-main>
 
-    <v-footer
-      app
-      inset
-      color="transparent"
-      absolute
-      height="56"
-      class="px-0"
-    >
-      <div class="boxed-container w-full">
-      </div>
+    <v-footer app inset color="transparent" absolute height="56" class="px-0">
+      <div class="boxed-container w-full"></div>
     </v-footer>
   </v-app>
 </template>
@@ -65,12 +40,14 @@
 <script>
 import { ref } from '@vue/composition-api'
 import { mdiMagnify, mdiBellOutline, mdiGithub } from '@mdi/js'
+import Snackbar from './components/Snackbar.vue'
 import VerticalNavMenu from './components/vertical-nav-menu/VerticalNavMenu.vue'
 import ThemeSwitcher from './components/ThemeSwitcher.vue'
 import AppBarUserMenu from './components/AppBarUserMenu.vue'
 
 export default {
   components: {
+    Snackbar,
     VerticalNavMenu,
     ThemeSwitcher,
     AppBarUserMenu,
@@ -81,6 +58,9 @@ export default {
     return {
       isDrawerOpen,
 
+      snackConfigs: {},
+      snackbar: false,
+
       // Icons
       icons: {
         mdiMagnify,
@@ -88,6 +68,11 @@ export default {
         mdiGithub,
       },
     }
+  },
+  methods: {
+    openSnackbar() {
+      this.snackbar = true
+    },
   },
 }
 </script>
