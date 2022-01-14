@@ -46,7 +46,7 @@
               @keypress.enter="efetuarLogin()"
             ></v-text-field>
 
-            <v-btn block color="primary" class="mt-6" @click="efetuarLogin()"> Login </v-btn>
+            <v-btn block color="primary" class="mt-6" :loading="loading" :disabled="loading" @click="efetuarLogin()"> Login </v-btn>
           </v-form>
         </v-card-text>
       </v-card>
@@ -93,6 +93,7 @@ export default {
 
       snackConfigs: {},
       snackbar: false,
+      loading: false,
 
       icons: {
         mdiEyeOutline,
@@ -102,13 +103,14 @@ export default {
   },
   methods: {
     efetuarLogin() {
-      ;(this.showSnackbar = true),
+      this.showSnackbar = true
+      this.loading = true      
         this.$store
           .dispatch('efetuarLogin', this.usuario)
           .then(() => {
             this.$session.start()
             this.$session.set('jwt', this.$store.state.token)
-            // this.$session.set("expire_time", this.$store.state.usuario.expire_time);
+            this.$session.set("expire_time", this.$store.state.usuario.expire_time);
             eventbus.$emit('makeSnackbar', {
               text: 'Seja Bem Vindo!',
               color: 'light-green darken-1 white--text',
@@ -122,6 +124,7 @@ export default {
               text: 'Usuário ou Senha Inválidos!',
               color: 'error white--text',
             })
+            this.loading = false
             this.usuario = {
               usuario: '',
               senha: '',
