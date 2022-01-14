@@ -16,14 +16,14 @@ composer install
 CREATE DATABASE digiwallet;
 ```
 3 - Crie uma cópia do arquivo .env.example para .env e altere os dados de conexões:
-
+```
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_DATABASE=digiwallet
 DB_USERNAME=seu_usuario_db
 DB_PASSWORD=sua_senha_db
-
+```
 ## Migrations e Seeds
 
 Para migrar todas as tabelas e popular o banco com os dados default, execute o comando:
