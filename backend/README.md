@@ -36,3 +36,4 @@ Para executar o backend, execute o comando:
 ```
 php artisan serve
 ```
+
