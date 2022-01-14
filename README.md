@@ -6,6 +6,17 @@ O Digiwallet é um Sistema para gestão financeira pessoal ou empresarial
 
 Na busca por um sistema de gestão financeira pessoal, nunca encontrei uma plataforma que me permitisse fazer um lançamento recorrente, por exemplo: Todos os meses pago uma conta de telefone onde o valor é sempre o mesmo. Em vez de ter que cadastrar um por um, o Digiwallet permite que eu coloque um período onde acontecerá essa recorrência, e cadastra tudo automaticamente pra mim.
 
+## Tecnologias
+
+### Backend
+
+- Laravel 8
+- Mysql
+
+### Frontend
+
+- Vue 2
+
 ## Como Funciona?
 
 Assim que faço o login já tenho uma conta chamada "Minha Conta". Nela sempre será atualizado o saldo (entradas - saídas).
