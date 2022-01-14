@@ -11,26 +11,41 @@ const routes = [
   {
     path: '/dashboard',
     name: 'dashboard',
+    meta: {
+      titulo: "Dashboard"
+    },
     component: () => import('@/views/dashboard/Dashboard.vue'),
   },
   {
     path: '/usuarios',
     name: 'usuarios',
+    meta: {
+      titulo: "Usuários"
+    },
     component: () => import('@/views/usuarios/Usuarios.vue'),
   },
   {
     path: '/clientes',
     name: 'clientes',
+    meta: {
+      titulo: "Clientes"
+    },
     component: () => import('@/views/clientes/Clientes.vue'),
   },
   {
     path: '/lancamentos',
     name: 'lancamentos',
+    meta: {
+      titulo: "Lançamentos"
+    },
     component: () => import('@/views/lancamentos/Lancamentos.vue'),
   },
   {
     path: '/configs',
     name: 'configs',
+    meta: {
+      titulo: "Configurações"
+    },
     component: () => import('@/views/configs/Configs.vue'),
   },
   {
@@ -46,6 +61,9 @@ const routes = [
   {
     path: '/contas',
     name: 'contas',
+    meta: {
+      titulo: "Contas"
+    },
     component: () => import('@/views/contas/Contas.vue'),
   },
   {

@@ -3,10 +3,20 @@
     <!-- basic -->
     <v-col cols="12">
       <v-card>
-        <v-card-title>Clientes</v-card-title>
-        <ClientesTable></ClientesTable>
+        <v-col cols="4">
+          <v-text-field
+            rounded
+            dense
+            outlined
+            v-model="termo"
+            :prepend-inner-icon="mdiMagnify"
+            class="app-bar-search flex-grow-0"
+            hide-details
+          ></v-text-field>
+        </v-col>
+        <ClientesTable :termo="termo"></ClientesTable>
         <ClientesForm :dialog="dialog" @closeForm="dialog = false"></ClientesForm>
-        <ClientesEdit :dialogEdit="dialogEdit"  @openEdit="openEdit" @closeEdit="dialogEdit = false"></ClientesEdit>
+        <ClientesEdit :dialogEdit="dialogEdit" @openEdit="openEdit" @closeEdit="dialogEdit = false"></ClientesEdit>
       </v-card>
     </v-col>
     <v-speed-dial
@@ -35,18 +45,17 @@
 </template>
 
 <script>
-
 import ClientesTable from './ClientesTable.vue'
 import ClientesForm from './ClientesForm.vue'
 import ClientesEdit from './ClientesEdit.vue'
 
-import { mdiPlus } from '@mdi/js'
+import { mdiPlus, mdiMagnify } from '@mdi/js'
 
 export default {
   components: {
     ClientesTable,
     ClientesForm,
-    ClientesEdit
+    ClientesEdit,
   },
   setup() {
     return {
@@ -62,6 +71,9 @@ export default {
       left: false,
       transition: 'slide-y-reverse-transition',
       mdiPlus,
+      mdiMagnify,
+
+      termo: "",
 
       dialog: false,
       dialogEdit: false,
@@ -70,7 +82,7 @@ export default {
   methods: {
     openEdit() {
       this.dialogEdit = true
-    }
+    },
   },
 }
 </script>

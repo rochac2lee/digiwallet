@@ -3,8 +3,18 @@
     <!-- basic -->
     <v-col cols="12">
       <v-card>
-        <v-card-title>Contas</v-card-title>
-        <ContasTable></ContasTable>
+        <v-col cols="4">
+          <v-text-field
+            rounded
+            dense
+            outlined
+            v-model="termo"
+            :prepend-inner-icon="mdiMagnify"
+            class="app-bar-search flex-grow-0"
+            hide-details
+          ></v-text-field>
+        </v-col>
+        <ContasTable :termo="termo"></ContasTable>
         <ContasForm :dialog="dialog" @close="dialog = false"></ContasForm>
       </v-card>
     </v-col>
@@ -32,7 +42,7 @@
 import ContasTable from './ContasTable.vue'
 import ContasForm from './ContasForm.vue'
 
-import { mdiPlus } from '@mdi/js'
+import { mdiPlus, mdiMagnify } from '@mdi/js'
 
 export default {
   components: {
@@ -53,10 +63,13 @@ export default {
       left: false,
       transition: 'slide-y-reverse-transition',
       mdiPlus,
+      mdiMagnify,
+
+      termo: '',
 
       dialog: false,
     }
-  }
+  },
 }
 </script>
 

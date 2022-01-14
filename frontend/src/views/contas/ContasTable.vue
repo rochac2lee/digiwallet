@@ -2,6 +2,7 @@
   <v-data-table
     :headers="headers"
     :items="contas"
+    :search="termo"
     :loading="loading"
     :loading-text="loading_text"
     :footer-props="footer_prop"
@@ -13,7 +14,7 @@ import { eventbus } from '@/main.js'
 
 export default {
   props: {
-    update: { type: Boolean, default: false },
+    termo: { type: String, default: '' },
   },
   data() {
     return {

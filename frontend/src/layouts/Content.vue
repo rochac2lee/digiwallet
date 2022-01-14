@@ -9,6 +9,7 @@
         <div class="d-flex align-center mx-6">
           <!-- Left Content -->
           <v-app-bar-nav-icon class="d-block d-lg-none me-2" @click="isDrawerOpen = !isDrawerOpen"></v-app-bar-nav-icon>
+          <h2>{{ this.$route.meta.titulo }}</h2>
 
           <v-spacer></v-spacer>
 

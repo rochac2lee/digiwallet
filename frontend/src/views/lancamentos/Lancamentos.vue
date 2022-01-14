@@ -3,7 +3,7 @@
     <!-- basic -->
     <v-col cols="12">
       <v-card>
-        <v-card-title>Lançamentos</v-card-title>
+        
         <LancamentosTable></LancamentosTable>
         
         <LancamentosForm :dialogLancamentos="dialogLancamentos" @closeFormLancamentos="dialogLancamentos = false"></LancamentosForm>
