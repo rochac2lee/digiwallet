@@ -62,6 +62,14 @@
                 </v-col>
                 <v-container v-if="cliente.tipo_cliente">
                   <v-row>
+                    <v-col cols="6">
+                      <v-text-field-simplemask v-model="cliente.telefone" label="Telefone"
+                        v-bind:properties="phone_properties" v-bind:options="phone_options" />
+                    </v-col>
+                    <v-col cols="6">
+                      <v-text-field :rules="[v => !!v || 'Informe um email']" label="Email"
+                        v-model="cliente.email" required></v-text-field>
+                    </v-col>
                     <v-col cols="4">
                       <v-text-field-cep
                         v-model="cliente.cep"
@@ -144,6 +152,7 @@
 import Cep from '@/components/Cep.vue'
 import Cpf from '@/components/Cpf.vue'
 import Cnpj from '@/components/Cnpj.vue'
+import SimpleMask from '@/components/SimpleMask.vue'
 
 import { eventbus } from '@/main.js'
 
@@ -154,6 +163,7 @@ export default {
     'v-text-field-cep': Cep,
     'v-text-field-cpf': Cpf,
     'v-text-field-cnpj': Cnpj,
+    'v-text-field-simplemask': SimpleMask,
   },
   props: {
     dialogEdit: { type: Boolean, default: false },
@@ -164,6 +174,25 @@ export default {
         cep: null,
         cpf_cnpj: null,
         logradouro: '',
+        telefone: "",
+        email: "",
+      },
+        phone_properties: {
+        prefix: '',
+        suffix: '',
+        readonly: false,
+        disabled: false,
+        outlined: false,
+        clearable: false,
+        placeholder: '',
+      },
+      phone_options: {
+        humanMask: '(##) #####-####',
+        machineMask: '(##) #####-####',
+        empty: null,
+        applyAfter: false,
+        alphanumeric: true,
+        lowerCase: false,
       },
       value: null,
       focus: false,

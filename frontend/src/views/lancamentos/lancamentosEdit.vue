@@ -218,7 +218,7 @@ export default {
             this.lancamento.tipo_fluxo = 'saida'
             break
         }
-        this.lancamento.status == true ? (this.lancamento.status = 2) : (this.lancamento.status = 0)
+        this.lancamento.status == true || this.lancamento.status == 2 ? (this.lancamento.status = 2) : (this.lancamento.status = 0)
         this.lancamento.data_inicio = this.dataInicio
         this.lancamento.data_fim = this.dataTermino
 

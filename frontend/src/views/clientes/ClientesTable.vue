@@ -20,9 +20,11 @@ export default {
   data() {
     return {
       headers: [
+        { text: 'CPF/CNPJ', value: 'cpf_cnpj' },
         { text: 'Nome', value: 'nome' },
         { text: 'Tipo', value: 'tipo_cliente' },
-        { text: 'CPF/CNPJ', value: 'cpf_cnpj' },
+        { text: 'Telefone', value: 'telefone' },
+        { text: 'email', value: 'email' },
       ],
       loading: true,
       loading_text: 'Carregando...',

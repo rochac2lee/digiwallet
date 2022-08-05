@@ -10,113 +10,77 @@
             <v-form ref="form" v-model="valid" lazy-validation>
               <v-row>
                 <v-col cols="2">
-                  <v-select
-                    :rules="[v => !!v || 'Tipo de Cliente']"
-                    v-model="cliente.tipo_cliente"
-                    :items="['PJ', 'PF']"
-                    label="Tipo"
-                  ></v-select>
+                  <v-select :rules="[v => !!v || 'Tipo de Cliente']" v-model="cliente.tipo_cliente"
+                    :items="['PJ', 'PF']" label="Tipo"></v-select>
                 </v-col>
                 <v-col cols="4" v-if="cliente.tipo_cliente === 'PF'">
-                  <v-text-field-cpf
-                    v-model="cliente.cpf_cnpj"
-                    label="CPF"
-                    v-bind:properties="{
-                      readonly: false,
-                      disabled: false,
-                      outlined: false,
-                      clearable: false,
-                      placeholder: '',
-                    }"
-                    v-bind:options="{
-                      outputMask: '###########',
-                      empty: null,
-                      applyAfter: false,
-                    }"
-                  />
+                  <v-text-field-cpf v-model="cliente.cpf_cnpj" label="CPF" v-bind:properties="{
+                    readonly: false,
+                    disabled: false,
+                    outlined: false,
+                    clearable: false,
+                    placeholder: '',
+                  }" v-bind:options="{
+                    outputMask: '###########',
+                    empty: null,
+                    applyAfter: false,
+                  }" />
                 </v-col>
                 <v-col cols="4" v-if="cliente.tipo_cliente === 'PJ'">
-                  <v-text-field-cnpj
-                    v-model="cliente.cpf_cnpj"
-                    label="CNPJ"
-                    v-bind:properties="{
-                      readonly: false,
-                      disabled: false,
-                      outlined: false,
-                      clearable: false,
-                    }"
-                    v-bind:options="{
-                      outputMask: '##############',
-                      empty: null,
-                      applyAfter: false,
-                    }"
-                  />
+                  <v-text-field-cnpj v-model="cliente.cpf_cnpj" label="CNPJ" v-bind:properties="{
+                    readonly: false,
+                    disabled: false,
+                    outlined: false,
+                    clearable: false,
+                  }" v-bind:options="{
+                    outputMask: '##############',
+                    empty: null,
+                    applyAfter: false,
+                  }" />
                 </v-col>
                 <v-col cols="6" v-if="cliente.tipo_cliente">
-                  <v-text-field
-                    :rules="[v => !!v || 'Informe um nome']"
-                    label="Nome Completo"
-                    v-model="cliente.nome"
-                    required
-                  ></v-text-field>
+                  <v-text-field :rules="[v => !!v || 'Informe um nome']" label="Nome Completo" v-model="cliente.nome"
+                    required></v-text-field>
                 </v-col>
                 <v-container v-if="cliente.tipo_cliente">
                   <v-row>
-                    <v-col cols="4">
-                      <v-text-field-cep
-                        v-model="cliente.cep"
-                        @change="getEndereco()"
-                        label="CEP"
-                        v-bind:properties="{
-                          disabled: false,
-                          outlined: false,
-                        }"
-                        v-bind:options="{
-                          machineMask: '########',
-                          empty: null,
-                          applyAfter: false,
-                        }"
-                      />
-                    </v-col>
-                    <v-col cols="5">
-                      <v-text-field
-                        :rules="[v => !!v || 'Informe um endereço']"
-                        label="Endereço"
-                        v-model="cliente.logradouro"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="3">
-                      <v-text-field
-                        :rules="[v => !!v || 'Informe um número']"
-                        label="Número"
-                        v-model="cliente.numero"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="4">
-                      <v-text-field
-                        :rules="[v => !!v || 'Informe um bairro']"
-                        label="Bairro"
-                        v-model="cliente.bairro"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="2">
-                      <v-text-field
-                        :rules="[v => !!v || 'Informe um estado']"
-                        label="Estado"
-                        v-model="cliente.estado_uf"
-                        required
-                      ></v-text-field>
+                    <v-col cols="6">
+                      <v-text-field-simplemask v-model="cliente.telefone" label="Telefone"
+                        v-bind:properties="phone_properties" v-bind:options="phone_options" />
                     </v-col>
                     <v-col cols="6">
-                      <v-text-field
-                        :rules="[v => !!v || 'Informe uma cidade']"
-                        label="Cidade"
-                        v-model="cliente.cidade"
-                        required
-                      ></v-text-field>
+                      <v-text-field :rules="[v => !!v || 'Informe um email']" label="Email"
+                        v-model="cliente.email" required></v-text-field>
+                    </v-col>
+                    <v-col cols="4">
+                      <v-text-field-cep v-model="cliente.cep" @change="getEndereco()" label="CEP" v-bind:properties="{
+                        disabled: false,
+                        outlined: false,
+                      }" v-bind:options="{
+                        machineMask: '########',
+                        empty: null,
+                        applyAfter: false,
+                      }" />
+                    </v-col>
+                    <v-col cols="5">
+                      <v-text-field :rules="[v => !!v || 'Informe um endereço']" label="Endereço"
+                        v-model="cliente.logradouro" required></v-text-field>
+                    </v-col>
+                    <v-col cols="3">
+                      <v-text-field :rules="[v => !!v || 'Informe um número']" label="Número" v-model="cliente.numero"
+                        required></v-text-field>
+                    </v-col>
+                    <v-col cols="4">
+                      <v-text-field :rules="[v => !!v || 'Informe um bairro']" label="Bairro" v-model="cliente.bairro"
+                        required></v-text-field>
+                    </v-col>
+                    <v-col cols="2">
+                      <v-text-field :rules="[v => !!v || 'Informe um estado']" label="Estado"
+                        v-model="cliente.estado_uf" required></v-text-field>
+                    </v-col>
+                    <v-col cols="6">
+                      <v-text-field :rules="[v => !!v || 'Informe uma cidade']" label="Cidade" v-model="cliente.cidade"
+                        required></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -138,6 +102,7 @@
 import Cep from '@/components/Cep.vue'
 import Cpf from '@/components/Cpf.vue'
 import Cnpj from '@/components/Cnpj.vue'
+import SimpleMask from '@/components/SimpleMask.vue'
 
 import { eventbus } from '@/main.js'
 
@@ -148,6 +113,7 @@ export default {
     'v-text-field-cep': Cep,
     'v-text-field-cpf': Cpf,
     'v-text-field-cnpj': Cnpj,
+    'v-text-field-simplemask': SimpleMask,
   },
   props: {
     dialog: { type: Boolean, default: false },
@@ -158,6 +124,25 @@ export default {
         cep: null,
         cpf_cnpj: null,
         logradouro: '',
+        telefone: "",
+        email: "",
+      },
+      phone_properties: {
+        prefix: '',
+        suffix: '',
+        readonly: false,
+        disabled: false,
+        outlined: false,
+        clearable: false,
+        placeholder: '',
+      },
+      phone_options: {
+        humanMask: '(##) #####-####',
+        machineMask: '(##) #####-####',
+        empty: null,
+        applyAfter: false,
+        alphanumeric: true,
+        lowerCase: false,
       },
       value: null,
       focus: false,
@@ -209,10 +194,10 @@ export default {
 
           if (res.data.erro == true) {
             eventbus.$emit('makeSnackbar', {
-            text: 'Endereço não encontrado!',
-            color: 'warning white--text',
-          })
-          } 
+              text: 'Endereço não encontrado!',
+              color: 'warning white--text',
+            })
+          }
         })
         .catch(err => {
           eventbus.$emit('makeSnackbar', {

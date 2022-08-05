@@ -9,13 +9,12 @@
     </v-card-subtitle>
 
     <v-card-text>
-      <vue-apex-charts :options="chartOptions" :series="series" height="210" />
+      <vue-apex-charts :options="chartOptions" :series="series" height="250" />
       <div class="d-flex align-center">
         <h3 class="text-2xl font-weight-semibold me-4">{{ percentualLucroLiquido }}%</h3>
-        <span
-          >Parabéns! Nos últimos 6 meses você teve um Lucro Líquido de {{ percentualLucroLiquido }}% 🤩 Continue
-          assim!</span
-        >
+        <span v-if="percentualLucroLiquido > 0">Parabéns! Nos últimos 6 meses você teve um Lucro Líquido de {{ percentualLucroLiquido }}% 🤩 Continue
+          assim!</span>
+        <span v-else>Precisamos melhorar! Nos últimos 6 meses você teve um Prejuízo Líquido de {{ percentualLucroLiquido }}%</span>
       </div>
 
       <!-- <v-btn block color="primary" class="mt-6" outlined> Ver mais </v-btn> -->
@@ -129,6 +128,8 @@ export default {
 
           this.series[0].data = data
           this.percentualLucroLiquido = parseInt(percentual)
+
+          window.dispatchEvent(new Event('resize'))
         },
         err => {
           eventbus.$emit('makeSnackbar', {

@@ -5,6 +5,7 @@
       <template v-slot:default>
         <thead>
           <tr>
+            <th class="text-center text-uppercase">Data</th>
             <th class="text-center text-uppercase">Tipo</th>
             <th class="text-uppercase">Título</th>
             <th class="text-uppercase">Cliente</th>
@@ -17,6 +18,7 @@
           <div class="contents" v-for="item in fluxos" :key="item.fluxos">
             <tr>
               <span class="contents pointer" @click="editarLancamento(item)">
+                <td class="text-center">{{ item.data_inicio_formatada }}</td>
                 <td class="text-center" v-if="item.tipo_fluxo == 'entrada'">
                   <v-tooltip right>
                     <template v-slot:activator="{ on, attrs }">
@@ -36,25 +38,21 @@
                 <td>{{ item.titulo }}</td>
                 <td>{{ item.cliente }}</td>
                 <td class="text-center">
-                  <v-btn
-                    rounded
-                    small
-                    :class="
-                      item.status == 0
-                        ? 'grey lighten-2 black--text'
-                        : item.status == 1
+                  <v-btn rounded small :class="
+                    item.status == 0
+                      ? 'grey lighten-2 black--text'
+                      : item.status == 1
                         ? 'primary'
                         : 'light-green darken-1 white--text'
-                    "
-                  >
+                  ">
                     {{ item.status == 0 ? 'Pendente' : item.status == 1 ? 'Recorrências em Aberto' : 'Pago Integral' }}
                   </v-btn>
                 </td>
                 <td>
                   {{
-                    item.recorrencias.length > 0
-                      ? item.recorrencias.length + 'x de R$ ' + item.valor
-                      : 'R$ ' + item.valor
+                      item.recorrencias.length > 0
+                        ? item.recorrencias.length + 'x de R$ ' + item.valor
+                        : 'R$ ' + item.valor
                   }}
                 </td>
               </span>
@@ -71,11 +69,8 @@
                     <v-col v-for="(recorrencia, index) in item.recorrencias" :key="index" cols="12" sm="6" md="3">
                       <v-list>
                         <v-list-item-group>
-                          <v-list-item
-                            class="pointer"
-                            :class="recorrencia.status == true ? 'success' : 'secondary'"
-                            @click="editarRecorrencia(recorrencia)"
-                          >
+                          <v-list-item class="pointer" :class="recorrencia.status == true ? 'success' : 'secondary'"
+                            @click="editarRecorrencia(recorrencia)">
                             <v-list-item-icon>
                               <v-avatar color="accent" size="48">
                                 <span class="white--text text-h5">{{ recorrencia.parcela_numero }}</span>
@@ -83,9 +78,8 @@
                             </v-list-item-icon>
                             <v-list-item-content>
                               <v-list-item-title v-text="'R$ ' + recorrencia.valor"></v-list-item-title>
-                              <v-list-item-subtitle
-                                v-text="recorrencia.data_referencia_formatada"
-                              ></v-list-item-subtitle>
+                              <v-list-item-subtitle v-text="recorrencia.data_referencia_formatada">
+                              </v-list-item-subtitle>
                             </v-list-item-content>
                           </v-list-item>
                         </v-list-item-group>
@@ -108,6 +102,9 @@ import { mdiCashPlus, mdiCashMinus, mdiEye, mdiPencil, mdiChevronDown, mdiChevro
 import { eventbus } from '@/main.js'
 
 export default {
+  props: {
+    filtro: Object,
+  },
   data() {
     return {
       fluxos: {},
@@ -154,7 +151,8 @@ export default {
         },
       )
     },
-    getFluxos() {
+    getLancamentos() {
+      this.loading = true
       this.$http.get(
         'fluxos',
         res => {
@@ -171,16 +169,55 @@ export default {
         },
       )
     },
+    getLancamentosFiltrados() {
+
+      this.loading = true
+
+      if (this.filtro.status) {
+        if (this.filtro.status.includes("1")) {
+          if (!this.filtro.status.includes("2")) {
+            this.filtro.status.push("2")
+          }
+          console.log(true);
+        } else {
+          if (this.filtro.status.includes("2")) {
+            var index = this.filtro.status.indexOf("2");
+            this.filtro.status.pop(index, 1)
+          }
+          console.log(false);
+        }
+      }
+      this.$http.post(
+        'fluxos/filter',
+        this.filtro,
+        res => {
+          console.log(res.data.data)
+          this.fluxos = res.data.data
+          this.loading = false
+        },
+        err => {
+          eventbus.$emit('makeSnackbar', {
+            text: 'Erro ao filtrar Lançamentos!',
+            color: 'error white--text',
+          })
+          console.error(err)
+        },
+      )
+    }
   },
   mounted() {
-    this.getFluxos()
+    this.getLancamentos()
+
+    eventbus.$on('filtrarLancamentos', () => {
+      this.getLancamentosFiltrados()
+    })
 
     eventbus.$on('updateLancamentos', () => {
-      this.getFluxos()
+      this.getLancamentos()
     })
 
     eventbus.$on('updateRecorrencias', () => {
-      this.getFluxos()
+      this.getLancamentos()
     })
   },
 }
@@ -190,6 +227,7 @@ export default {
 .pointer {
   cursor: pointer;
 }
+
 .contents {
   display: contents;
 }

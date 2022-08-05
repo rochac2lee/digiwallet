@@ -8590,6 +8590,11 @@ vue-eslint-parser@^7.0.0:
     lodash "^4.17.21"
     semver "^6.3.0"
 
+vue-google-charts@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/vue-google-charts/-/vue-google-charts-1.1.0.tgz#bcd1e113ff5c305f3d3df7e52c4c778b947dc953"
+  integrity sha512-wGAgAynIIUKmP5eJUFlx69e8gjIDpyqHlVsvFyrnd2tGZk3a6FI83dRhdssxPyOc9y41+2QEfqUV9SsR+n6s5A==
+
 vue-hot-reload-api@^2.3.0:
   version "2.3.4"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.4.tgz#532955cc1eb208a3d990b3a9f9a70574657e08f2"

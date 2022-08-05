@@ -16,14 +16,21 @@
     <v-col
       cols="12"
       sm="6"
-      md="4"
+      md="6"
     >
       <dashboard-weekly-overview />
+    </v-col>
+    <v-col
+      cols="12"
+      sm="6"
+      md="6"
+    >
+      <dashboard-geo-overview />
     </v-col>
 
     <v-col
       cols="12"
-      sm="8"
+      sm="12"
     >
       <dashboard-card-entradas-e-saidas />
     </v-col>
@@ -38,6 +45,7 @@ import StatisticsCardVertical from '@/components/statistics-card/StatisticsCardV
 import DashboardStatisticsCard from './DashboardStatisticsCard.vue'
 import DashboardCardEntradasESaidas from './DashboardCardEntradasESaidas.vue'
 import DashboardWeeklyOverview from './DashboardWeeklyOverview.vue'
+import DashboardGeoOverview from './DashboardGeoOverview.vue'
 
 export default {
   components: {
@@ -45,6 +53,7 @@ export default {
     DashboardStatisticsCard,
     DashboardCardEntradasESaidas,
     DashboardWeeklyOverview,
+    DashboardGeoOverview,
   },
   setup() {
     const totalProfit = {

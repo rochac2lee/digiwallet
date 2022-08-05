@@ -85,11 +85,10 @@ export default {
 
     return {
       isPasswordVisible: false,
-      // usuario: {
-      //   usuario: 'admin@digiwallet.com',
-      //   senha: 'admin',
-      // },
-      usuario: {},
+      usuario: {
+        // usuario: 'cleberli@encode.dev.br',
+        // senha: 'qwerty@848625',
+      },
 
       snackConfigs: {},
       snackbar: false,
@@ -104,7 +103,7 @@ export default {
   methods: {
     efetuarLogin() {
       this.showSnackbar = true
-      this.loading = true      
+      this.loading = true
         this.$store
           .dispatch('efetuarLogin', this.usuario)
           .then(() => {

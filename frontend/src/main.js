@@ -20,6 +20,10 @@ Vue.use(VuetifyMask)
 
 export const eventbus = new Vue({
   methods: {
+    filtrarLancamentos() {
+      this.$emit('filtrarLancamentos')
+    },
+
     updateLancamentos() {
       this.$emit('updateLancamentos')
     },
