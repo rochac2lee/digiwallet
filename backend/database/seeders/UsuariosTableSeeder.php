@@ -15,14 +15,14 @@ class UsuariosTableSeeder extends Seeder
     public function run()
     {
         $usuarios = array([
-            "nome" => "Administrador",
+            "name" => "Administrador",
             "usuario" => "admin@digiwallet.com",
             "senha" => md5("admin"),
             "perfil" => "administrador",
             'token' =>MakeJwt([
                 'data' => [
                     'iss' => 'digiwallet',
-                    'nome' => "Administrador",
+                    'name' => "Administrador",
                     'usuario' => "admin@digiwallet.com"
                 ]
                 ]),

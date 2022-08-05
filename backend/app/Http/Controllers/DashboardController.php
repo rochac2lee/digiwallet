@@ -20,12 +20,14 @@ class DashboardController extends Controller
         $totalClientes = Cliente::all()->count();
         $totalUsuarios = Usuario::all()->count();
 
+        $totalClientesporEstado = Cliente::select('estado_uf', DB::raw('count(estado_uf) as quantidade'))->groupBy('estado_uf')->get();
+
         $saldos = saldos();
         $totalEntradas = $saldos['entradas'];
         $totalSaidas = $saldos['saidas'];
 
         // Lucro Líquido últimos 6 meses
-        $periodoIni = date("Y-m", strtotime(date("Y-m-d") . "-5 month")) . "-01";
+        $periodoIni = date("Y-m", strtotime(date("Y-m-d") . "-6 month")) . "-01";
         $periodoFim = date("Y-m") . "-01";
 
         $firstDate  = new DateTime($periodoIni);
@@ -33,7 +35,10 @@ class DashboardController extends Controller
         $interval   = $firstDate->diff($secondDate);
         $interval->m = $interval->m + 1;
 
-        $dates = DateRecurrences($periodoIni, $interval->m);
+        $range = DateRecurrences($periodoIni, $interval->m);
+
+        unset($range[0]);
+        $dates = array_values($range);
 
         $saldos = [];
         foreach ($dates as $key => $date) {
@@ -82,6 +87,6 @@ class DashboardController extends Controller
         $saidas = Fluxo::all()->where('tipo_fluxo', 'saida')->take(5);
 
 
-        return response(['status' => "success", 'indicadoresGerais' => $dashboard, 'lucroLiquidoUltimos6Meses' => $saldos, 'entradas' => $entradas, 'saidas' => $saidas], 200);
+        return response(['status' => "success", 'indicadoresGerais' => $dashboard, 'lucroLiquidoUltimos6Meses' => $saldos, 'entradas' => $entradas, 'saidas' => $saidas, 'totalClientesporEstado' => json_decode($totalClientesporEstado)], 200);
     }
 }

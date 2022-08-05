@@ -48,7 +48,7 @@ class UsuariosController extends Controller
             ->select('*')
             ->where('usuario', $request->usuario)
             ->first();
-            
+
         if ($usuario) {
             return response(['status' => "error", 'data' => $usuario, 'message' => "Usuário $request->usuario já está cadastrado!"], 409);
         } else if ($request->cliente_id && !Cliente::find($request->cliente_id)) {

@@ -7,6 +7,7 @@ use App\Models\Cliente;
 use App\Models\Conta;
 use App\Models\Fluxo;
 use App\Models\Recorrencia;
+use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +21,8 @@ class FluxosController extends Controller
      */
     public function index()
     {
-        $fluxos = Fluxo::all();
+        $fluxos = Fluxo::whereMonth('data_inicio', '=', date('m'))->orderBy('created_at', 'desc')->get();
+        // $fluxos = Fluxo::orderBy('created_at', 'desc')->get();
 
         foreach ($fluxos as $fluxo) {
             if ($fluxo->conta_id) {
@@ -29,20 +31,22 @@ class FluxosController extends Controller
 
             if ($fluxo->cliente_id) {
                 $fluxo->cliente = Cliente::find($fluxo->cliente_id)->nome;
-                if (strlen($fluxo->cliente) > 10)
-                $fluxo->cliente  = substr($fluxo->cliente , 0, 12) . '...';
+                if (strlen($fluxo->cliente) > 15)
+                    $fluxo->cliente  = substr($fluxo->cliente, 0, 12) . '...';
             } else {
                 $fluxo->cliente = "N/A";
             }
+
+            $fluxo->data_inicio_formatada = date('d/m/Y', strtotime($fluxo->data_inicio));
 
             $fluxo->recorrencias = DB::table('recorrencias')
                 ->select('*')
                 ->where('fluxo_id', $fluxo->id)
                 ->get();
 
-                foreach ($fluxo->recorrencias as $recorrencia) {
-                    $recorrencia->data_referencia_formatada = date('d/m/Y', strtotime($recorrencia->data_referencia));
-                }
+            foreach ($fluxo->recorrencias as $recorrencia) {
+                $recorrencia->data_referencia_formatada = date('d/m/Y', strtotime($recorrencia->data_referencia));
+            }
         }
 
         return response(['status' => 'success', 'total' => sizeof($fluxos), 'data' => $fluxos], 200);
@@ -117,6 +121,73 @@ class FluxosController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function filter(Request $request) {
+
+        if (isset($request->periodo_formatado)) {
+            unset($request->periodo_formatado);
+        }
+
+        $fluxos = Fluxo::select('*');
+
+        if ($request->periodo) {
+            if (sizeof($request->periodo) == 1) {
+                $start = Carbon::parse($request->periodo[0])->startOfDay();
+                $end = Carbon::parse($request->periodo[0])->endOfDay();
+                $fluxos->whereBetween('data_inicio', [$start, $end]);
+            } else {
+                $start = Carbon::parse($request->periodo[0])->startOfDay();
+                $end = Carbon::parse($request->periodo[1])->endOfDay();
+                $fluxos->whereBetween('data_inicio', [$start, $end]);
+            }
+        }
+        if ($request->titulo) {
+            $fluxos->where('titulo', 'LIKE', '%'.$request->titulo.'%');
+        }
+        if ($request->status) {
+            $fluxos->whereIn('status', $request->status);
+        }
+        if ($request->tipo_fluxo) {
+            $fluxos->whereIn('tipo_fluxo', $request->tipo_fluxo);
+        }
+        if ($request->forma_pagamento) {
+            $fluxos->whereIn('recorrencia', $request->forma_pagamento);
+        }
+
+        $fluxos = $fluxos->orderBy('created_at', 'desc')->get();
+
+        foreach ($fluxos as $fluxo) {
+            if ($fluxo->conta_id) {
+                $fluxo->conta = Conta::find($fluxo->conta_id)->nome;
+            }
+
+            if ($fluxo->cliente_id) {
+                $fluxo->cliente = Cliente::find($fluxo->cliente_id)->nome;
+                if (strlen($fluxo->cliente) > 15)
+                    $fluxo->cliente  = substr($fluxo->cliente, 0, 12) . '...';
+            } else {
+                $fluxo->cliente = "N/A";
+            }
+
+            $fluxo->data_inicio_formatada = date('d/m/Y', strtotime($fluxo->data_inicio));
+
+            $fluxo->recorrencias = DB::table('recorrencias')
+                ->select('*')
+                ->where('fluxo_id', $fluxo->id)
+                ->get();
+
+            foreach ($fluxo->recorrencias as $recorrencia) {
+                $recorrencia->data_referencia_formatada = date('d/m/Y', strtotime($recorrencia->data_referencia));
+            }
+        }
+
+        return response(['status' => 'success', 'total' => sizeof($fluxos), 'data' => $fluxos], 200);
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -137,11 +208,12 @@ class FluxosController extends Controller
         }
 
         $request = $request->all();
+        unset($request['data_inicio_formatada']);
         unset($request['conta']);
         unset($request['cliente']);
         unset($request['recorrencias']);
         $request['valor'] = str_replace(".", ",", $request['valor']);
-        
+
         $recorrencias = array();
 
         $firstDate  = new DateTime($fluxo->data_inicio);

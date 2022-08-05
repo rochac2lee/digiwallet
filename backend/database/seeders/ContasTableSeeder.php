@@ -15,7 +15,7 @@ class ContasTableSeeder extends Seeder
     public function run()
     {
         $contas = array([
-            "nome" => "Minha Conta",
+            "name" => "Minha Conta",
             "saldo" => "0,00",
             'created_at' => now(),
             'updated_at' => now(),
