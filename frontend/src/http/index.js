@@ -4,13 +4,8 @@ import VueCookies from "vue-cookies"
 
 Vue.use(VueCookies)
 
-const API_HOST = "https://api.digiwallet.com.br"
-
-// const API_HOST = "http://" + window.location.hostname + ":8000";
-
-
 const api = axios.create({
-    baseURL: `${API_HOST}`
+    baseURL: process.env.VUE_APP_BASE_API_URL
 })
 
 const config = () => ({
@@ -63,7 +58,6 @@ const httpDelete = (endpoint, id, response, reject) =>
     .catch(reject)
 
 export default {
-    baseUrl: `http://${API_HOST}`,
     post: httpPost,
     get: httpGet,
     put: httpPut,

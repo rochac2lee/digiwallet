@@ -1,0 +1,55 @@
+version: '3.7'
+services:
+  db:
+    image: mysql:8.0.29
+    platform: linux/amd64
+    container_name: db-digiwallet
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    ports:
+      - 3309:3306
+    environment:
+      MYSQL_DATABASE: digiwallet
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: root
+    volumes:
+      - ./backend/.docker/mysql:/docker-entrypoint-initdb.d
+    networks:
+      - digiwallet
+
+  backend:
+    depends_on:
+      - db
+    build:
+      args:
+        user: digiwallet
+        uid: 1000
+      context: ./backend
+      dockerfile: Dockerfile
+    image: backend-digiwallet
+    container_name: backend-digiwallet
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./backend/:/var/www
+    ports:
+      - 8000:8000
+    networks:
+      - digiwallet
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend-digiwallet
+    working_dir: /app/frontend
+    volumes:
+      - ./frontend:/app/frontend
+    ports:
+      - 8080:8080
+    networks:
+      - digiwallet
+      
+networks:
+  digiwallet:
+    driver: bridge
