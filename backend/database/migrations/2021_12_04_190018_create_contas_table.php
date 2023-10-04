@@ -16,7 +16,7 @@ class CreateContasTable extends Migration
     {
         Schema::create('contas', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
+            $table->string('nome');
             $table->string('saldo');
             $table->timestamps();
             $table->softDeletes();

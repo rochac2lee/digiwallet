@@ -32,7 +32,7 @@ class FluxosController extends Controller
             if ($fluxo->cliente_id) {
                 $fluxo->cliente = Cliente::find($fluxo->cliente_id)->nome;
                 if (strlen($fluxo->cliente) > 15)
-                    $fluxo->cliente  = substr($fluxo->cliente, 0, 12) . '...';
+                    $fluxo->cliente = substr($fluxo->cliente, 0, 12) . '...';
             } else {
                 $fluxo->cliente = "N/A";
             }
@@ -89,10 +89,12 @@ class FluxosController extends Controller
 
             $recorrencias = array();
 
-            $firstDate  = new DateTime($fluxo->data_inicio);
+            $firstDate = new DateTime($fluxo->data_inicio);
             $secondDate = new DateTime($fluxo->data_fim);
-            $interval   = $firstDate->diff($secondDate);
-            $interval->m = $interval->m + 1;
+            $interval = $firstDate->diff($secondDate);
+
+            $totalMonths = $interval->y * 12 + $interval->m;
+            $interval->m = $totalMonths + 1;
 
             if ($fluxo->recorrencia == true) {
 
@@ -125,7 +127,8 @@ class FluxosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function filter(Request $request) {
+    public function filter(Request $request)
+    {
 
         if (isset($request->periodo_formatado)) {
             unset($request->periodo_formatado);
@@ -145,7 +148,7 @@ class FluxosController extends Controller
             }
         }
         if ($request->titulo) {
-            $fluxos->where('titulo', 'LIKE', '%'.$request->titulo.'%');
+            $fluxos->where('titulo', 'LIKE', '%' . $request->titulo . '%');
         }
         if ($request->status) {
             $fluxos->whereIn('status', $request->status);
@@ -167,7 +170,7 @@ class FluxosController extends Controller
             if ($fluxo->cliente_id) {
                 $fluxo->cliente = Cliente::find($fluxo->cliente_id)->nome;
                 if (strlen($fluxo->cliente) > 15)
-                    $fluxo->cliente  = substr($fluxo->cliente, 0, 12) . '...';
+                    $fluxo->cliente = substr($fluxo->cliente, 0, 12) . '...';
             } else {
                 $fluxo->cliente = "N/A";
             }
@@ -198,14 +201,7 @@ class FluxosController extends Controller
     {
         $fluxo = Fluxo::find($id);
 
-        $recorrencias = DB::table('recorrencias')
-            ->select('*')
-            ->where('fluxo_id', $fluxo->id)
-            ->get();
-
-        for ($i = 0; $i < sizeof($recorrencias); $i++) {
-            Recorrencia::find($recorrencias[$i]->id)->delete();
-        }
+        Recorrencia::where('fluxo_id', $fluxo->id)->delete();
 
         $request = $request->all();
         unset($request['data_inicio_formatada']);
@@ -216,10 +212,12 @@ class FluxosController extends Controller
 
         $recorrencias = array();
 
-        $firstDate  = new DateTime($fluxo->data_inicio);
+        $firstDate = new DateTime($fluxo->data_inicio);
         $secondDate = new DateTime($fluxo->data_fim);
-        $interval   = $firstDate->diff($secondDate);
-        $interval->m = $interval->m + 1;
+        $interval = $firstDate->diff($secondDate);
+
+        $totalMonths = $interval->y * 12 + $interval->m;
+        $interval->m = $totalMonths + 1;
 
         $fluxo->valor = $request['valor'];
 
@@ -239,7 +237,7 @@ class FluxosController extends Controller
         // Atualiza o Fluxo com novos valores
         $fluxo->update($request);
 
-        $fluxo->recorrencias = $recorrencias;
+        $fluxo->recorrencias = Recorrencia::where('fluxo_id', $fluxo->id)->get();
 
         return response(['status' => "success", 'data' => $fluxo, 'message' => "Dados atualizados com sucesso!"], 201);
     }
